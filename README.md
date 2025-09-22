@@ -1,16 +1,11 @@
-# pemrograman_mobile
+# pemrograman mobile evan diantha fafian
 
-A new Flutter project.
+Tugas Pemrograman Mobile
 
-## Getting Started
+Nama    : Evan Diantha Fafian
+Kelas   : SIB 3G
+Absen   : 09
+NIM     : 2341760163
+github  : [rankadian](https://github.com/rankadian)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Modul Navigasi dan Viewlist
