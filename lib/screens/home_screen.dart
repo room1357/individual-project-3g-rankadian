@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-import 'expense_list_screen.dart';
+// import 'expense_list_screen.dart';
+import 'advanced_expense_list_screen.dart';
 import 'profile_screen.dart'; // Import ProfileScreen
 import 'settings_screen.dart'; // Import SettingsScreen
 
@@ -47,25 +48,48 @@ class HomeScreen extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 children: [
-                  _buildDashboardCard('Pengeluaran', Icons.attach_money, Colors.green, () {
+                  _buildDashboardCard(
+                    'Pengeluaran',
+                    Icons.attach_money,
+                    Colors.green,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AdvancedExpenseListScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildDashboardCard('Profil', Icons.person, Colors.blue, () {
+                    // Tambahkan onTap
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ExpenseListScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
                     );
                   }),
-                  _buildDashboardCard('Profil', Icons.person, Colors.blue, () { // Tambahkan onTap
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                    );
-                  }),
-                  _buildDashboardCard('Pesan', Icons.message, Colors.orange, null),
-                  _buildDashboardCard('Pengaturan', Icons.settings, Colors.purple, () { // Tambahkan onTap
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SettingsScreen()),
-                    );
-                  }),
+                  _buildDashboardCard(
+                    'Pesan',
+                    Icons.message,
+                    Colors.orange,
+                    null,
+                  ),
+                  _buildDashboardCard(
+                    'Pengaturan',
+                    Icons.settings,
+                    Colors.purple,
+                    () {
+                      // Tambahkan onTap
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -75,34 +99,42 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDashboardCard(String title, IconData icon, Color color, VoidCallback? onTap) {
+  Widget _buildDashboardCard(
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback? onTap,
+  ) {
     return Card(
       elevation: 4,
       child: Builder(
-        builder: (context) => InkWell(
-          onTap: onTap ?? () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Fitur $title segera hadir!')),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 48, color: color),
-                const SizedBox(height: 12),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+        builder:
+            (context) => InkWell(
+              onTap:
+                  onTap ??
+                  () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Fitur $title segera hadir!')),
+                    );
+                  },
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, size: 48, color: color),
+                    const SizedBox(height: 12),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
       ),
     );
   }
