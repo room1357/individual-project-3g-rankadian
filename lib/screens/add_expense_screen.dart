@@ -35,7 +35,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             ),
             TextField(
               controller: _amountController,
-              decoration: const InputDecoration(labelText: 'Jumlah'),
+              decoration: const InputDecoration(labelText: 'Harga'),
               keyboardType: TextInputType.number,
             ),
             DropdownButtonFormField<String>(
