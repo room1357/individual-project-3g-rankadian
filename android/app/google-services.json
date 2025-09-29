@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "693876952423",
+    "project_id": "pemrograman-mobile-a09ca",
+    "storage_bucket": "pemrograman-mobile-a09ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693876952423:android:26428c2b9645f28434f3c2",
+        "android_client_info": {
+          "package_name": "com.example.pemrograman_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMjf2bi01o64qkz3VaMyntms30TB0ZYhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
