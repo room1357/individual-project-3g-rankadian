@@ -3,7 +3,7 @@ import '../models/category.dart';
 
 class ExpenseService {
   static List<Expense> _expenses = []; // In-memory data
-  static List<Category> _categories = [
+  static final List<Category> _categories = [
     Category(id: '1', name: 'Makanan'),
     Category(id: '2', name: 'Transportasi'),
     Category(id: '3', name: 'Utilitas'),
@@ -20,9 +20,30 @@ class ExpenseService {
     if (_expenses.isEmpty) {
       // Data sampel (update category menjadi categoryId)
       _expenses = [
-        Expense(id: '1', title: 'Belanja Bulanan', amount: 150000, categoryId: '1', date: DateTime(2024, 9, 15), description: 'Belanja kebutuhan'),
-        Expense(id: '2', title: 'Bensin Motor', amount: 50000, categoryId: '2', date: DateTime(2024, 9, 14), description: 'Isi bensin'),
-        Expense(id: '3', title: 'Kopi di Cafe', amount: 25000, categoryId: '1', date: DateTime(2024, 9, 14), description: 'Ngopi pagi'),
+        Expense(
+          id: '1',
+          title: 'Belanja Bulanan',
+          amount: 150000,
+          categoryId: '1',
+          date: DateTime(2024, 9, 15),
+          description: 'Belanja kebutuhan',
+        ),
+        Expense(
+          id: '2',
+          title: 'Bensin Motor',
+          amount: 50000,
+          categoryId: '2',
+          date: DateTime(2024, 9, 14),
+          description: 'Isi bensin',
+        ),
+        Expense(
+          id: '3',
+          title: 'Kopi di Cafe',
+          amount: 25000,
+          categoryId: '1',
+          date: DateTime(2024, 9, 14),
+          description: 'Ngopi pagi',
+        ),
         // Tambah lebih banyak jika perlu
       ];
     }
@@ -57,7 +78,8 @@ class ExpenseService {
   static Map<String, double> getTotalByCategory() {
     final Map<String, double> totals = {};
     for (var expense in _expenses) {
-      totals[expense.categoryId] = (totals[expense.categoryId] ?? 0) + expense.amount;
+      totals[expense.categoryId] =
+          (totals[expense.categoryId] ?? 0) + expense.amount;
     }
     return totals;
   }
@@ -88,7 +110,8 @@ class ExpenseService {
   static String exportToCSV() {
     String csv = 'ID,Judul,Jumlah,Kategori,Tanggal,Deskripsi\n';
     for (var expense in _expenses) {
-      csv += '${expense.id},"${expense.title}",${expense.amount},${expense.categoryName},"${expense.formattedDate}","${expense.description}"\n';
+      csv +=
+          '${expense.id},"${expense.title}",${expense.amount},${expense.categoryName},"${expense.formattedDate}","${expense.description}"\n';
     }
     return csv;
   }

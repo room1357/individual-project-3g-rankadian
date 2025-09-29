@@ -79,11 +79,13 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
     );
 
     if (confirmed == true) {
-      ExpenseService.deleteExpense(id);
-      _refreshExpenses(); // Refresh data dari service
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pengeluaran "$title" dihapus!')),
-      );
+    ExpenseService.deleteExpense(id);
+    _refreshExpenses();
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Pengeluaran "$title" dihapus!')),
+    );
     }
   }
 

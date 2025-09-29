@@ -53,7 +53,7 @@ class _EditExpenseScreenState extends State<EditExpenseScreen> {
               keyboardType: TextInputType.number,
             ),
             DropdownButtonFormField<String>(
-              value: _selectedCategoryId,
+              initialValue: _selectedCategoryId,
               decoration: const InputDecoration(labelText: 'Kategori'),
               items:
                   categories

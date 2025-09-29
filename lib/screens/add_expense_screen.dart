@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/expense.dart';
-import '../models/category.dart';
+// import '../models/category.dart';
 import '../services/expense_service.dart';
 import '../utils/date_utils.dart';
 import 'advanced_expense_list_screen.dart';
@@ -39,7 +39,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               keyboardType: TextInputType.number,
             ),
             DropdownButtonFormField<String>(
-              value: _selectedCategoryId,
+              initialValue: _selectedCategoryId,
               decoration: const InputDecoration(labelText: 'Kategori'),
               items:
                   categories

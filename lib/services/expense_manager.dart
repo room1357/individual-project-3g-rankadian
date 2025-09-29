@@ -8,7 +8,7 @@ class ExpenseManager {
       id: '1',
       title: 'Belanja Bulanan',
       amount: 150000,
-      categoryId: 'makanan', // ✅ pakai categoryId
+      categoryId: 'makanan',
       date: DateTime(2024, 9, 15),
       description: 'Belanja kebutuhan bulanan di supermarket',
     ),

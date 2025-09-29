@@ -38,6 +38,7 @@ dependencies:
   firebase_auth: ^4.15.3           # Authentication (login/register)
   cloud_firestore: ^4.8.3          # Database NoSQL untuk expenses/users
   firebase_storage: ^11.1.3        # Opsional: Upload foto profil
+  collection: ^1.18.0         # Utilitas tambahan untuk koleksi data
 
 
   # The following adds the Cupertino Icons font to your application.
