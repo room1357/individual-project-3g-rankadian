@@ -21,19 +21,11 @@ class AboutScreen extends StatelessWidget {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            Text(
-              'Versi: 1.0.0',
-              style: TextStyle(fontSize: 16),
-            ),
+            Text('Versi: 1.0.0', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),
             Text(
               'Aplikasi ini membantu Anda melacak dan mengelola pengeluaran harian Anda dengan mudah.',
               style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Dikembangkan oleh: BLACKBOX.AI Assistant',
-              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
             ),
           ],
         ),
