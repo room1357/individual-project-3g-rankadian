@@ -8,7 +8,7 @@ class ExpenseManager {
       id: '1',
       title: 'Belanja Bulanan',
       amount: 150000,
-      category: 'Makanan',
+      categoryId: 'makanan', // ✅ pakai categoryId
       date: DateTime(2024, 9, 15),
       description: 'Belanja kebutuhan bulanan di supermarket',
     ),
@@ -16,7 +16,7 @@ class ExpenseManager {
       id: '2',
       title: 'Bensin Motor',
       amount: 50000,
-      category: 'Transportasi',
+      categoryId: 'transportasi',
       date: DateTime(2024, 9, 14),
       description: 'Isi bensin motor untuk transportasi',
     ),
@@ -24,7 +24,7 @@ class ExpenseManager {
       id: '3',
       title: 'Kopi di Cafe',
       amount: 25000,
-      category: 'Makanan',
+      categoryId: 'makanan',
       date: DateTime(2024, 9, 14),
       description: 'Ngopi pagi dengan teman',
     ),
@@ -32,7 +32,7 @@ class ExpenseManager {
       id: '4',
       title: 'Tagihan Internet',
       amount: 300000,
-      category: 'Utilitas',
+      categoryId: 'utilitas',
       date: DateTime(2024, 9, 13),
       description: 'Tagihan internet bulanan',
     ),
@@ -40,7 +40,7 @@ class ExpenseManager {
       id: '5',
       title: 'Tiket Bioskop',
       amount: 100000,
-      category: 'Hiburan',
+      categoryId: 'hiburan',
       date: DateTime(2024, 9, 12),
       description: 'Nonton film weekend bersama keluarga',
     ),
@@ -48,7 +48,7 @@ class ExpenseManager {
       id: '6',
       title: 'Beli Buku',
       amount: 75000,
-      category: 'Pendidikan',
+      categoryId: 'pendidikan',
       date: DateTime(2024, 9, 11),
       description: 'Buku pemrograman untuk belajar',
     ),
@@ -56,7 +56,7 @@ class ExpenseManager {
       id: '7',
       title: 'Makan Siang',
       amount: 35000,
-      category: 'Makanan',
+      categoryId: 'makanan',
       date: DateTime(2024, 9, 11),
       description: 'Makan siang di restoran',
     ),
@@ -64,7 +64,7 @@ class ExpenseManager {
       id: '8',
       title: 'Ongkos Bus',
       amount: 10000,
-      category: 'Transportasi',
+      categoryId: 'transportasi',
       date: DateTime(2024, 9, 10),
       description: 'Ongkos perjalanan harian ke kampus',
     ),
@@ -74,7 +74,8 @@ class ExpenseManager {
   static Map<String, double> getTotalByCategory(List<Expense> expenses) {
     Map<String, double> result = {};
     for (var expense in expenses) {
-      result[expense.category] = (result[expense.category] ?? 0) + expense.amount;
+      result[expense.categoryName] =
+          (result[expense.categoryName] ?? 0) + expense.amount;
     }
     return result;
   }
@@ -87,8 +88,10 @@ class ExpenseManager {
 
   // 3. Mendapatkan pengeluaran bulan tertentu
   static List<Expense> getExpensesByMonth(List<Expense> expenses, int month, int year) {
-    return expenses.where((expense) =>
-        expense.date.month == month && expense.date.year == year).toList();
+    return expenses
+        .where((expense) =>
+            expense.date.month == month && expense.date.year == year)
+        .toList();
   }
 
   // 4. Mencari pengeluaran berdasarkan kata kunci
@@ -97,58 +100,56 @@ class ExpenseManager {
     return expenses.where((expense) =>
         expense.title.toLowerCase().contains(lowerKeyword) ||
         expense.description.toLowerCase().contains(lowerKeyword) ||
-        expense.category.toLowerCase().contains(lowerKeyword)).toList();
+        expense.categoryName.toLowerCase().contains(lowerKeyword)).toList();
   }
 
   // 5. Mendapatkan rata-rata pengeluaran harian
   static double getAverageDaily(List<Expense> expenses) {
     if (expenses.isEmpty) return 0;
     double total = expenses.fold(0, (sum, expense) => sum + expense.amount);
-    // Hitung jumlah hari unik
-    Set<String> uniqueDays = expenses.map((expense) =>
-        '${expense.date.year}-${expense.date.month}-${expense.date.day}').toSet();
+    Set<String> uniqueDays = expenses
+        .map((expense) =>
+            '${expense.date.year}-${expense.date.month}-${expense.date.day}')
+        .toSet();
     return total / uniqueDays.length;
   }
 
-  // Contoh operasi collections lanjutan dari PDF:
-
-  // Filtering dengan where()
+  // Filtering
   static List<Expense> getFoodExpenses(List<Expense> expenses) {
     return expenses
-        .where((expense) => expense.category.toLowerCase() == 'makanan')
+        .where((expense) => expense.categoryName.toLowerCase() == 'makanan')
         .toList();
   }
 
   static List<Expense> getExpensiveItems(List<Expense> expenses, double threshold) {
-    return expenses
-        .where((expense) => expense.amount > threshold)
-        .toList();
+    return expenses.where((expense) => expense.amount > threshold).toList();
   }
 
-  // Transformasi dengan map()
+  // Transformasi
   static List<String> getExpenseTitles(List<Expense> expenses) {
     return expenses.map((expense) => expense.title).toList();
   }
 
   static List<String> getExpenseSummaries(List<Expense> expenses) {
-    return expenses.map((expense) => '${expense.title}: ${expense.formattedAmount}').toList();
+    return expenses
+        .map((expense) => '${expense.title}: ${expense.formattedAmount}')
+        .toList();
   }
 
-  // Grouping dengan groupBy (membutuhkan package collection)
-  // Tambahkan ke pubspec.yaml: collection: ^1.18.0
+  // Grouping dengan groupBy
   static Map<String, List<Expense>> groupByCategory(List<Expense> expenses) {
-    return groupBy(expenses, (expense) => expense.category);
+    return groupBy(expenses, (expense) => expense.categoryName);
   }
 
   // Sorting
   static List<Expense> sortByAmountDescending(List<Expense> expenses) {
-    List<Expense> sortedList = [...expenses]; // Buat salinan agar tidak mengubah list asli
+    List<Expense> sortedList = [...expenses];
     sortedList.sort((a, b) => b.amount.compareTo(a.amount));
     return sortedList;
   }
 
   static List<Expense> sortByDateDescending(List<Expense> expenses) {
-    List<Expense> sortedList = [...expenses]; // Buat salinan
+    List<Expense> sortedList = [...expenses];
     sortedList.sort((a, b) => b.date.compareTo(a.date));
     return sortedList;
   }

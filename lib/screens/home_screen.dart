@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-// import 'expense_list_screen.dart';
 import 'advanced_expense_list_screen.dart';
-import 'profile_screen.dart'; // Import ProfileScreen
-import 'settings_screen.dart'; // Import SettingsScreen
+import 'profile_screen.dart'; 
+import 'settings_screen.dart'; 
+import 'add_expense_screen.dart';
+import 'category_screen.dart';
+import 'statistics_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -62,7 +64,6 @@ class HomeScreen extends StatelessWidget {
                     },
                   ),
                   _buildDashboardCard('Profil', Icons.person, Colors.blue, () {
-                    // Tambahkan onTap
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -81,7 +82,6 @@ class HomeScreen extends StatelessWidget {
                     Icons.settings,
                     Colors.purple,
                     () {
-                      // Tambahkan onTap
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -90,6 +90,63 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                   ),
+                  _buildDashboardCard(
+                    'Tambah Pengeluaran',
+                    Icons.add,
+                    Colors.teal,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddExpenseScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildDashboardCard(
+                    'Kelola Kategori',
+                    Icons.category,
+                    Colors.indigo,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CategoryScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildDashboardCard(
+                    'Statistik',
+                    Icons.bar_chart,
+                    Colors.amber, // Warna kuning untuk analisis
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const StatisticsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  // jika ingin card Export (bisa dihapus jika tidak perlu)
+                  // _buildDashboardCard(
+                  //   'Export Data',
+                  //   Icons.download,
+                  //   Colors.red,
+                  //   () {
+                  //     // Panggil dialog export langsung dari sini (seperti di StatisticsScreen)
+                  //     final csvContent = ExpenseService.exportToCSV();
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (context) => AlertDialog(
+                  //         title: const Text('Export CSV'),
+                  //         content: SingleChildScrollView(child: SelectableText(csvContent)),
+                  //         actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Tutup'))],
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -108,33 +165,32 @@ class HomeScreen extends StatelessWidget {
     return Card(
       elevation: 4,
       child: Builder(
-        builder:
-            (context) => InkWell(
-              onTap:
-                  onTap ??
-                  () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Fitur $title segera hadir!')),
-                    );
-                  },
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: 48, color: color),
-                    const SizedBox(height: 12),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+        builder: (context) => InkWell(
+          onTap: onTap ??
+              () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Fitur $title segera hadir!')),
+                );
+              },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 48, color: color),
+                const SizedBox(height: 12),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
+              ],
             ),
+          ),
+        ),
       ),
     );
   }
