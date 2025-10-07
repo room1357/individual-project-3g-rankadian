@@ -1,187 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class LoginScreen extends StatelessWidget {
-//   const LoginScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Login'), backgroundColor: Colors.blue),
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             // Logo
-//             Container(
-//               width: 100,
-//               height: 100,
-//               decoration: BoxDecoration(
-//                 color: Colors.blue,
-//                 shape: BoxShape.circle,
-//               ),
-//               child: Icon(Icons.person, size: 50, color: Colors.white),
-//             ),
-//             SizedBox(height: 32),
-
-//             // Username Field
-//             TextField(
-//               decoration: InputDecoration(
-//                 labelText: 'Username',
-//                 border: OutlineInputBorder(),
-//                 prefixIcon: Icon(Icons.person),
-//               ),
-//             ),
-//             SizedBox(height: 16),
-
-//             // Password Field
-//             TextField(
-//               obscureText: true,
-//               decoration: InputDecoration(
-//                 labelText: 'Password',
-//                 border: OutlineInputBorder(),
-//                 prefixIcon: Icon(Icons.lock),
-//               ),
-//             ),
-//             SizedBox(height: 24),
-
-//             // Login Button
-//             SizedBox(
-//               width: double.infinity,
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   // Handle login
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: Colors.blue,
-//                   padding: EdgeInsets.symmetric(vertical: 16),
-//                 ),
-//                 child: Text(
-//                   'LOGIN',
-//                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 16),
-
-//             // Register Link
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Text("Don't have an account? "),
-//                 TextButton(
-//                   onPressed: () {
-//                     // Navigate to register
-//                   },
-//                   child: Text('Register'),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// import 'package:flutter/material.dart';
-// import 'register_screen.dart';
-// import 'home_screen.dart';
-
-// class LoginScreen extends StatelessWidget {
-//   const LoginScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Masuk'), backgroundColor: Colors.blue),
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             // Logo aplikasi
-//             Container(
-//               width: 100,
-//               height: 100,
-//               decoration: BoxDecoration(
-//                 color: Colors.blue,
-//                 shape: BoxShape.circle,
-//               ),
-//               child: Icon(Icons.person, size: 50, color: Colors.white),
-//             ),
-//             SizedBox(height: 32),
-
-//             // Field username
-//             TextField(
-//               decoration: InputDecoration(
-//                 labelText: 'Username',
-//                 border: OutlineInputBorder(),
-//                 prefixIcon: Icon(Icons.person),
-//               ),
-//             ),
-//             SizedBox(height: 16),
-
-//             // Field password
-//             TextField(
-//               obscureText: true,
-//               decoration: InputDecoration(
-//                 labelText: 'Password',
-//                 border: OutlineInputBorder(),
-//                 prefixIcon: Icon(Icons.lock),
-//               ),
-//             ),
-//             SizedBox(height: 24),
-
-//             // Tombol login
-//             SizedBox(
-//               width: double.infinity,
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   // Navigasi ke HomeScreen dengan pushReplacement
-//                   Navigator.pushReplacement(
-//                     context,
-//                     MaterialPageRoute(builder: (context) => const HomeScreen()),
-//                   );
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: Colors.blue,
-//                   padding: EdgeInsets.symmetric(vertical: 16),
-//                 ),
-//                 child: Text(
-//                   'MASUK',
-//                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 16),
-
-//             // Link ke halaman register
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Text("Belum punya akun? "),
-//                 TextButton(
-//                   onPressed: () {
-//                     // Navigasi ke RegisterScreen dengan push
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => const RegisterScreen(),
-//                       ),
-//                     );
-//                   },
-//                   child: Text('Daftar'),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'register_screen.dart';
 import 'home_screen.dart';
@@ -198,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _loading = false;
+  bool _obscurePassword = true;
 
   void _login() async {
     final email = _emailController.text.trim();
@@ -205,7 +22,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Isi semua kolom terlebih dahulu')),
+        SnackBar(
+          content: const Text('Isi semua kolom terlebih dahulu'),
+          backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       return;
     }
@@ -225,7 +49,14 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email atau password salah')),
+        SnackBar(
+          content: const Text('Email atau password salah'),
+          backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
   }
@@ -233,88 +64,291 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Masuk'), backgroundColor: Colors.blue),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo aplikasi
-            Container(
-              width: 100,
-              height: 100,
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.person, size: 50, color: Colors.white),
-            ),
-            const SizedBox(height: 32),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF667eea),
+              const Color(0xFF764ba2),
+              const Color(0xFFf093fb),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo dengan efek glassmorphism
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(alpha: 0.2),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.3),
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.account_circle,
+                      size: 70,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
-            // Field email
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
-              ),
-            ),
-            const SizedBox(height: 16),
+                  // Welcome text
+                  const Text(
+                    'Selamat Datang',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Masuk untuk melanjutkan',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
 
-            // Field password
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
-              ),
-            ),
-            const SizedBox(height: 24),
+                  // Card container untuk form
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.15),
+                          blurRadius: 30,
+                          offset: const Offset(0, 15),
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(28.0),
+                    child: Column(
+                      children: [
+                        // Email Field
+                        TextField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          style: const TextStyle(fontSize: 16),
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.email_outlined,
+                              color: const Color(0xFF667eea),
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey.shade50,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF667eea),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 18,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
 
-            // Tombol login
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _loading ? null : _login,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: _loading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        'MASUK',
+                        // Password Field
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          style: const TextStyle(fontSize: 16),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock_outline,
+                              color: const Color(0xFF667eea),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: Colors.grey.shade600,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey.shade50,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF667eea),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 18,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Forgot password
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              // Handle forgot password
+                            },
+                            child: const Text(
+                              'Lupa Password?',
+                              style: TextStyle(
+                                color: Color(0xFF667eea),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Login Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            onPressed: _loading ? null : _login,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF667eea),
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              shadowColor: const Color(
+                                0xFF667eea,
+                              ).withValues(alpha: 0.5),
+                            ),
+                            child:
+                                _loading
+                                    ? const SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                    : const Text(
+                                      'MASUK',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2,
+                                      ),
+                                    ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Register Link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Belum punya akun? ",
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontSize: 15,
+                        ),
                       ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: const Text(
+                            'Daftar Sekarang',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-
-            // Link ke halaman register
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Belum punya akun? "),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text('Daftar'),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
