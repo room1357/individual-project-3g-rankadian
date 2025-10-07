@@ -3,7 +3,7 @@ import 'login_screen.dart';
 import 'advanced_expense_list_screen.dart';
 import 'profile_screen.dart'; 
 import 'settings_screen.dart'; 
-import 'add_expense_screen.dart';
+// import 'add_expense_screen.dart';
 import 'category_screen.dart';
 import 'statistics_screen.dart';
 
@@ -90,19 +90,19 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildDashboardCard(
-                    'Tambah Pengeluaran',
-                    Icons.add,
-                    Colors.teal,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddExpenseScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  // _buildDashboardCard(
+                  //   'Tambah Pengeluaran',
+                  //   Icons.add,
+                  //   Colors.teal,
+                  //   () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const AddExpenseScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   _buildDashboardCard(
                     'Kelola Kategori',
                     Icons.category,

@@ -14,10 +14,10 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ListTile(
-            title: const Text('Notifikasi'),
-            trailing: Switch(value: true, onChanged: (bool value) {}),
-          ),
+          // ListTile(
+          //   title: const Text('Notifikasi'),
+          //   trailing: Switch(value: true, onChanged: (bool value) {}),
+          // ),
           ListTile(
             title: const Text('Bahasa'),
             subtitle: const Text('Indonesia'),
