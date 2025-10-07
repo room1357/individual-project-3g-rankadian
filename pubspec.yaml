@@ -34,10 +34,10 @@ dependencies:
   fl_chart: ^1.1.1 # Untuk grafik di StatisticsScreen
   csv: ^6.0.0 # Untuk ekspor CSV
   intl: ^0.20.2 # Untuk format tanggal dan mata uang
-  firebase_core: ^4.1.1 # Core Firebase
-  firebase_auth: ^6.1.0 # Authentication (login/register)
-  cloud_firestore: ^6.0.2 # Database NoSQL untuk expenses/users
-  firebase_storage: ^13.0.2 # Opsional: Upload foto profil
+  # firebase_core: ^4.1.1 # Core Firebase
+  # firebase_auth: ^6.1.0 # Authentication (login/register)
+  # cloud_firestore: ^6.0.2 # Database NoSQL untuk expenses/users
+  # firebase_storage: ^13.0.2 # Opsional: Upload foto profil
   uuid: ^4.3.3
   collection: ^1.18.0 # Utilitas tambahan untuk koleksi data
 
