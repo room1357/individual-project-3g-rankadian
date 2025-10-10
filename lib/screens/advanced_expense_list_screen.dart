@@ -14,17 +14,16 @@ class AdvancedExpenseListScreen extends StatefulWidget {
 }
 
 class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
-  // Menggunakan data dari ExpenseService (dinamis)
   List<Expense> expenses = [];
   List<Expense> filteredExpenses = [];
-  String selectedCategory = 'Semua'; // Default filter kategori
+  String selectedCategory = 'Semua';
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _refreshExpenses(); // Inisialisasi dengan data dari service
-    searchController.addListener(_filterExpenses); // Dengarkan perubahan pada search bar
+    _refreshExpenses();
+    searchController.addListener(_filterExpenses);
   }
 
   @override
@@ -34,292 +33,651 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
     super.dispose();
   }
 
-  // Method baru: Refresh data dari service dan filter ulang
   void _refreshExpenses() {
     setState(() {
-      expenses = List.from(ExpenseService.expenses); // Ambil data terbaru
-      _filterExpenses(); // Filter ulang berdasarkan search dan category
+      expenses = List.from(ExpenseService.expenses);
+      _filterExpenses();
     });
   }
 
-  // Fungsi untuk memfilter pengeluaran berdasarkan search query dan kategori (update untuk categoryName)
   void _filterExpenses() {
     setState(() {
-      filteredExpenses = expenses.where((expense) {
-        bool matchesSearch = searchController.text.isEmpty ||
-            expense.title.toLowerCase().contains(searchController.text.toLowerCase()) ||
-            expense.description.toLowerCase().contains(searchController.text.toLowerCase());
+      filteredExpenses =
+          expenses.where((expense) {
+            bool matchesSearch =
+                searchController.text.isEmpty ||
+                expense.title.toLowerCase().contains(
+                  searchController.text.toLowerCase(),
+                ) ||
+                expense.description.toLowerCase().contains(
+                  searchController.text.toLowerCase(),
+                );
 
-        bool matchesCategory = selectedCategory == 'Semua' ||
-            expense.categoryName == selectedCategory; // Ganti dari expense.category ke categoryName
+            bool matchesCategory =
+                selectedCategory == 'Semua' ||
+                expense.categoryName == selectedCategory;
 
-        return matchesSearch && matchesCategory;
-      }).toList();
+            return matchesSearch && matchesCategory;
+          }).toList();
     });
   }
 
-  // Method untuk konfirmasi delete (baru, untuk fitur delete)
   Future<void> _confirmDelete(String id, String title) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Hapus Pengeluaran?'),
-        content: Text('Apakah Anda yakin ingin menghapus "$title"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: const Text('Hapus Pengeluaran?'),
+            content: Text('Apakah Anda yakin ingin menghapus "$title"?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Batal'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text('Hapus'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Hapus', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
     );
 
     if (confirmed == true) {
-    ExpenseService.deleteExpense(id);
-    _refreshExpenses();
+      ExpenseService.deleteExpense(id);
+      _refreshExpenses();
 
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Pengeluaran "$title" dihapus!')),
-    );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Pengeluaran "$title" dihapus!'),
+          backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     }
   }
 
-  // Method untuk menghitung total menggunakan fold() (update format opsional)
   String _calculateTotal(List<Expense> expensesToCalculate) {
-    double total = expensesToCalculate.fold(0, (sum, expense) => sum + expense.amount);
-    return CurrencyUtils.formatCurrency(total); // Gunakan utils jika ada, atau 'Rp ${total.toStringAsFixed(0)}'
+    double total = expensesToCalculate.fold(
+      0,
+      (sum, expense) => sum + expense.amount,
+    );
+    return CurrencyUtils.formatCurrency(total);
   }
 
-  // Method untuk menghitung rata-rata (update format opsional)
   String _calculateAverage(List<Expense> expensesToCalculate) {
-    if (expensesToCalculate.isEmpty) return CurrencyUtils.formatCurrency(0); // Atau 'Rp 0'
-    double total = expensesToCalculate.fold(0, (sum, expense) => sum + expense.amount);
+    if (expensesToCalculate.isEmpty) return CurrencyUtils.formatCurrency(0);
+    double total = expensesToCalculate.fold(
+      0,
+      (sum, expense) => sum + expense.amount,
+    );
     double average = total / expensesToCalculate.length;
-    return CurrencyUtils.formatCurrency(average); // Atau 'Rp ${average.toStringAsFixed(0)}'
+    return CurrencyUtils.formatCurrency(average);
   }
 
-  // Method untuk mendapatkan warna berdasarkan kategori (update untuk categoryName, opsional gunakan expense.categoryColor)
   Color _getCategoryColor(String categoryName) {
     switch (categoryName.toLowerCase()) {
       case 'makanan':
-        return Colors.orange;
+        return const Color(0xFFff6b6b);
       case 'transportasi':
-        return Colors.green;
+        return const Color(0xFF4ecdc4);
       case 'utilitas':
-        return Colors.purple;
+        return const Color(0xFF95e1d3);
       case 'hiburan':
-        return Colors.pink;
+        return const Color(0xFFf38181);
       case 'pendidikan':
-        return Colors.blue;
+        return const Color(0xFF667eea);
       default:
         return Colors.grey;
     }
-    // Opsional: Jika model Expense punya getter categoryColor, return expense.categoryColor;
   }
 
-  // Method untuk mendapatkan icon berdasarkan kategori (update untuk categoryName, opsional gunakan expense.categoryIcon)
   IconData _getCategoryIcon(String categoryName) {
     switch (categoryName.toLowerCase()) {
       case 'makanan':
-        return Icons.restaurant;
+        return Icons.restaurant_rounded;
       case 'transportasi':
-        return Icons.directions_car;
+        return Icons.directions_car_rounded;
       case 'utilitas':
-        return Icons.home;
+        return Icons.home_rounded;
       case 'hiburan':
-        return Icons.movie;
+        return Icons.movie_rounded;
       case 'pendidikan':
-        return Icons.school;
+        return Icons.school_rounded;
       default:
         return Icons.attach_money;
     }
-    // Opsional: Jika model Expense punya getter categoryIcon, return expense.categoryIcon;
   }
 
-  // Method untuk menampilkan detail pengeluaran dalam dialog (update untuk categoryName)
   void _showExpenseDetails(BuildContext context, Expense expense) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(expense.title),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Jumlah: ${expense.formattedAmount}'),
-            const SizedBox(height: 8),
-            Text('Kategori: ${expense.categoryName}'), // Ganti dari expense.category
-            const SizedBox(height: 8),
-            Text('Tanggal: ${expense.formattedDate}'),
-            const SizedBox(height: 8),
-            Text('Deskripsi: ${expense.description}'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Tutup'),
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: _getCategoryColor(expense.categoryName),
+                  child: Icon(
+                    _getCategoryIcon(expense.categoryName),
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    expense.title,
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildDetailRow(
+                  'Jumlah',
+                  expense.formattedAmount,
+                  Icons.payments_rounded,
+                ),
+                const SizedBox(height: 12),
+                _buildDetailRow(
+                  'Kategori',
+                  expense.categoryName,
+                  Icons.category_rounded,
+                ),
+                const SizedBox(height: 12),
+                _buildDetailRow(
+                  'Tanggal',
+                  expense.formattedDate,
+                  Icons.calendar_today_rounded,
+                ),
+                const SizedBox(height: 12),
+                _buildDetailRow(
+                  'Deskripsi',
+                  expense.description,
+                  Icons.description_rounded,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Tutup'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
-  // Widget pembantu untuk kartu statistik (tetap sama)
-  Widget _buildStatCard(String label, String value) {
-    return Column(
+  Widget _buildDetailRow(String label, String value, IconData icon) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        Icon(icon, size: 20, color: const Color(0xFF667eea)),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Mendapatkan daftar kategori unik dari data expenses (update untuk categoryName)
-    Set<String> uniqueCategories = {'Semua'};
-    uniqueCategories.addAll(expenses.map((e) => e.categoryName)); // Ganti dari e.category
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pengeluaran Advanced'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          // Search bar (tetap sama)
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              controller: searchController,
-              decoration: const InputDecoration(
-                hintText: 'Cari pengeluaran...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-              // onChanged sudah diatur di initState melalui addListener
-            ),
-          ),
-          // Category filter (tetap sama, tapi data dari uniqueCategories yang diupdate)
-          SizedBox(
-            height: 50,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: uniqueCategories
-                  .map(
-                    (category) => Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: FilterChip(
-                        label: Text(category),
-                        selected: selectedCategory == category,
-                        onSelected: (selected) {
-                          setState(() {
-                            selectedCategory = category;
-                            _filterExpenses(); // Panggil filter saat kategori berubah
-                          });
-                        },
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-          // Statistics summary (tetap sama)
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStatCard('Total', _calculateTotal(filteredExpenses)),
-                _buildStatCard('Jumlah', '${filteredExpenses.length} item'),
-                _buildStatCard('Rata-rata', _calculateAverage(filteredExpenses)),
-              ],
-            ),
-          ),
-          // Expense list (update trailing untuk edit/delete, leading untuk categoryName)
-          Expanded(
-            child: filteredExpenses.isEmpty
-                ? const Center(child: Text('Tidak ada pengeluaran ditemukan'))
-                : ListView.builder(
-                    itemCount: filteredExpenses.length,
-                    itemBuilder: (context, index) {
-                      final expense = filteredExpenses[index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: _getCategoryColor(expense.categoryName), // Update argumen
-                            child: Icon(
-                              _getCategoryIcon(expense.categoryName), // Update argumen
-                              color: Colors.white,
-                            ),
-                          ),
-                          title: Text(expense.title),
-                          subtitle: Text('${expense.categoryName} - ${expense.formattedDate}'), // Update ke categoryName
-                          trailing: Row( // Update: Tambah edit/delete di samping amount
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Amount (seperti existing)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: Text(
-                                  expense.formattedAmount,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red[600],
-                                  ),
-                                ),
-                              ),
-                              // Tombol Edit (baru)
-                              IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.blue),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditExpenseScreen(expense: expense),
-                                    ),
-                                  ).then((_) => _refreshExpenses()); // Refresh setelah edit
-                                },
-                                tooltip: 'Edit',
-                              ),
-                              // Tombol Delete (baru)
-                              IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => _confirmDelete(expense.id, expense.title),
-                                tooltip: 'Hapus',
-                              ),
-                            ],
-                          ),
-                          onTap: () => _showExpenseDetails(context, expense), // Tetap untuk detail
-                        ),
-                      );
-                    },
-                  ),
+  Widget _buildStatCard(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.8), color],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
-      // Tambahkan FAB untuk add expense (baru)
-      floatingActionButton: FloatingActionButton(
+      child: Column(
+        children: [
+          Icon(icon, color: Colors.white, size: 28),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Set<String> uniqueCategories = {'Semua'};
+    uniqueCategories.addAll(expenses.map((e) => e.categoryName));
+
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [const Color(0xFF667eea), const Color(0xFF764ba2)],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Custom AppBar
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.arrow_back_rounded),
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    const Text(
+                      'Daftar Pengeluaran',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Main Content
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+
+                      // Search Bar
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: TextField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Cari pengeluaran...',
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Colors.grey.shade600,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey.shade100,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Category Filter
+                      SizedBox(
+                        height: 45,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          children:
+                              uniqueCategories
+                                  .map(
+                                    (category) => Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: FilterChip(
+                                        label: Text(category),
+                                        selected: selectedCategory == category,
+                                        onSelected: (selected) {
+                                          setState(() {
+                                            selectedCategory = category;
+                                            _filterExpenses();
+                                          });
+                                        },
+                                        backgroundColor: Colors.grey.shade100,
+                                        selectedColor: const Color(0xFF667eea),
+                                        labelStyle: TextStyle(
+                                          color:
+                                              selectedCategory == category
+                                                  ? Colors.white
+                                                  : Colors.grey.shade700,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        checkmarkColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Statistics Summary
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _buildStatCard(
+                                'Total',
+                                _calculateTotal(filteredExpenses),
+                                Icons.account_balance_wallet_rounded,
+                                const Color(0xFF667eea),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildStatCard(
+                                'Item',
+                                '${filteredExpenses.length}',
+                                Icons.receipt_rounded,
+                                const Color(0xFFf093fb),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildStatCard(
+                                'Rata-rata',
+                                _calculateAverage(filteredExpenses),
+                                Icons.trending_up_rounded,
+                                const Color(0xFF4facfe),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Expense List
+                      Expanded(
+                        child:
+                            filteredExpenses.isEmpty
+                                ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.inbox_rounded,
+                                        size: 80,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        'Tidak ada pengeluaran',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                : ListView.builder(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  itemCount: filteredExpenses.length,
+                                  itemBuilder: (context, index) {
+                                    final expense = filteredExpenses[index];
+                                    return Container(
+                                      margin: const EdgeInsets.only(bottom: 12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.shade200,
+                                            blurRadius: 10,
+                                            offset: const Offset(0, 5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: const EdgeInsets.all(
+                                          12,
+                                        ),
+                                        leading: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: _getCategoryColor(
+                                              expense.categoryName,
+                                            ).withOpacity(0.2),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            _getCategoryIcon(
+                                              expense.categoryName,
+                                            ),
+                                            color: _getCategoryColor(
+                                              expense.categoryName,
+                                            ),
+                                            size: 28,
+                                          ),
+                                        ),
+                                        title: Text(
+                                          expense.title,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              expense.categoryName,
+                                              style: TextStyle(
+                                                color: Colors.grey.shade600,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                            Text(
+                                              expense.formattedDate,
+                                              style: TextStyle(
+                                                color: Colors.grey.shade500,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        trailing: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              expense.formattedAmount,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.red.shade600,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder:
+                                                            (context) =>
+                                                                EditExpenseScreen(
+                                                                  expense:
+                                                                      expense,
+                                                                ),
+                                                      ),
+                                                    ).then(
+                                                      (_) => _refreshExpenses(),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(6),
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.blue.shade50,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
+                                                    ),
+                                                    child: Icon(
+                                                      Icons.edit_rounded,
+                                                      color:
+                                                          Colors.blue.shade600,
+                                                      size: 18,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 6),
+                                                InkWell(
+                                                  onTap:
+                                                      () => _confirmDelete(
+                                                        expense.id,
+                                                        expense.title,
+                                                      ),
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(6),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.red.shade50,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
+                                                    ),
+                                                    child: Icon(
+                                                      Icons.delete_rounded,
+                                                      color:
+                                                          Colors.red.shade600,
+                                                      size: 18,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        onTap:
+                                            () => _showExpenseDetails(
+                                              context,
+                                              expense,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
-          ).then((_) => _refreshExpenses()); // Refresh setelah add
+          ).then((_) => _refreshExpenses());
         },
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: const Color(0xFF667eea),
+        icon: const Icon(Icons.add_rounded, color: Colors.white),
+        label: const Text(
+          'Tambah',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
