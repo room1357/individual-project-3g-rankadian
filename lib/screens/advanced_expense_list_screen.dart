@@ -264,14 +264,14 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.8), color],
+          colors: [color.withValues(alpha: 0.8), color],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -328,7 +328,7 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: IconButton(
@@ -522,7 +522,7 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                                           decoration: BoxDecoration(
                                             color: _getCategoryColor(
                                               expense.categoryName,
-                                            ).withOpacity(0.2),
+                                            ).withValues(alpha: 0.2),
                                             borderRadius: BorderRadius.circular(
                                               12,
                                             ),
