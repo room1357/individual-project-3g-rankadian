@@ -2,7 +2,6 @@
 
 Tugas Pemrograman Mobile
 
-
 Nama : Evan Diantha Fafian
 
 Kelas : SIB 3G
