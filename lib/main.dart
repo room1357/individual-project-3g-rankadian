@@ -1,68 +1,27 @@
-// import 'package:flutter/material.dart';
-// import 'screens/login_screen.dart';
-// import 'screens/register_screen.dart';
-// import 'screens/home_screen.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-//       ),
-//       home: const LoginScreen(),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/login_screen.dart';
-// import 'services/looping_examples.dart';
-// import 'models/expense.dart';
+import 'screens/home_screen.dart';
 import 'services/expense_service.dart';
+import 'services/auth_service.dart';
 
-void main() {
-  //   print('--- Pengujian Looping Examples ---');
-  //   List<Expense> sampleExpenses = LoopingExamples.expenses;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  //   // 1. Menghitung total
-  //   print('\n--- Menghitung Total ---');
-  //   print('Total (Traditional): ${LoopingExamples.calculateTotalTraditional(sampleExpenses)}');
-  //   print('Total (For-in): ${LoopingExamples.calculateTotalForIn(sampleExpenses)}');
-  //   print('Total (ForEach): ${LoopingExamples.calculateTotalForEach(sampleExpenses)}');
-  //   print('Total (Fold): ${LoopingExamples.calculateTotalFold(sampleExpenses)}');
-  //   print('Total (Reduce): ${LoopingExamples.calculateTotalReduce(sampleExpenses)}');
-
-  //   // 2. Mencari item
-  //   print('\n--- Mencari Item ---');
-  //   String searchId = '3';
-  //   print('Cari ID $searchId (Traditional): ${LoopingExamples.findExpenseTraditional(sampleExpenses, searchId)?.title}');
-  //   print('Cari ID $searchId (firstWhere): ${LoopingExamples.findExpenseWhere(sampleExpenses, searchId)?.title}');
-  //   print('Cari ID $searchId (firstWhereOrElse): ${LoopingExamples.findExpenseWhereOrElse(sampleExpenses, searchId)?.title}');
-
-  //   String nonExistentId = '99';
-  //   print('Cari ID $nonExistentId (firstWhereOrElse): ${LoopingExamples.findExpenseWhereOrElse(sampleExpenses, nonExistentId)?.title}');
-
-  //   // 3. Filtering
-  //   print('\n--- Filtering ---');
-  //   String filterCategory = 'Makanan';
-  //   print('Filter Kategori "$filterCategory" (Manual): ${LoopingExamples.filterByCategoryManual(sampleExpenses, filterCategory).map((e) => e.title).toList()}');
-  //   print('Filter Kategori "$filterCategory" (Where): ${LoopingExamples.filterByCategoryWhere(sampleExpenses, filterCategory).map((e) => e.title).toList()}');
-
+  // 🔹 Inisialisasi data yang disimpan (expenses & users)
   ExpenseService.initialize();
+  await AuthService().init();
 
-  runApp(const MyApp());
+  // 🔹 Cek status login terakhir dari SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
+  final loggedInUser = prefs.getString('loggedInUser');
+
+  runApp(MyApp(isLoggedIn: loggedInUser != null));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +31,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const LoginScreen(), 
+      // 🔹 Jika sudah login → HomeScreen, jika belum → LoginScreen
+      home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
     );
   }
 }

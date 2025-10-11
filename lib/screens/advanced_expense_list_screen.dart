@@ -161,99 +161,6 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
     }
   }
 
-  void _showExpenseDetails(BuildContext context, Expense expense) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: _getCategoryColor(expense.categoryName),
-                  child: Icon(
-                    _getCategoryIcon(expense.categoryName),
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    expense.title,
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ),
-              ],
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildDetailRow(
-                  'Jumlah',
-                  expense.formattedAmount,
-                  Icons.payments_rounded,
-                ),
-                const SizedBox(height: 12),
-                _buildDetailRow(
-                  'Kategori',
-                  expense.categoryName,
-                  Icons.category_rounded,
-                ),
-                const SizedBox(height: 12),
-                _buildDetailRow(
-                  'Tanggal',
-                  expense.formattedDate,
-                  Icons.calendar_today_rounded,
-                ),
-                const SizedBox(height: 12),
-                _buildDetailRow(
-                  'Deskripsi',
-                  expense.description,
-                  Icons.description_rounded,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Tutup'),
-              ),
-            ],
-          ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value, IconData icon) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 20, color: const Color(0xFF667eea)),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-              ),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildStatCard(
     String label,
     String value,
@@ -513,145 +420,172 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                                           ),
                                         ],
                                       ),
-                                      child: ListTile(
-                                        contentPadding: const EdgeInsets.all(
-                                          12,
-                                        ),
-                                        leading: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: _getCategoryColor(
-                                              expense.categoryName,
-                                            ).withValues(alpha: 0.2),
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                          ),
-                                          child: Icon(
-                                            _getCategoryIcon(
-                                              expense.categoryName,
-                                            ),
-                                            color: _getCategoryColor(
-                                              expense.categoryName,
-                                            ),
-                                            size: 28,
-                                          ),
-                                        ),
-                                        title: Text(
-                                          expense.title,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        subtitle: Column(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              expense.categoryName,
-                                              style: TextStyle(
-                                                color: Colors.grey.shade600,
-                                                fontSize: 13,
+                                            // Leading (ikon kategori)
+                                            Container(
+                                              padding: const EdgeInsets.all(12),
+                                              decoration: BoxDecoration(
+                                                color: _getCategoryColor(
+                                                  expense.categoryName,
+                                                ).withValues(alpha: 0.2),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: Icon(
+                                                _getCategoryIcon(
+                                                  expense.categoryName,
+                                                ),
+                                                color: _getCategoryColor(
+                                                  expense.categoryName,
+                                                ),
+                                                size: 28,
                                               ),
                                             ),
-                                            Text(
-                                              expense.formattedDate,
-                                              style: TextStyle(
-                                                color: Colors.grey.shade500,
-                                                fontSize: 12,
+
+                                            const SizedBox(width: 12),
+
+                                            // Title + Subtitle
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    expense.title,
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    expense.categoryName,
+                                                    style: TextStyle(
+                                                      color:
+                                                          Colors.grey.shade600,
+                                                      fontSize: 13,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    expense.formattedDate,
+                                                    style: TextStyle(
+                                                      color:
+                                                          Colors.grey.shade500,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        trailing: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              expense.formattedAmount,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.red.shade600,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Row(
+
+                                            const SizedBox(width: 12),
+
+                                            // Trailing (nominal + tombol edit & hapus)
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder:
-                                                            (context) =>
-                                                                EditExpenseScreen(
+                                                Text(
+                                                  expense.formattedAmount,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: Colors.red.shade600,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder:
+                                                                (
+                                                                  context,
+                                                                ) => EditExpenseScreen(
                                                                   expense:
                                                                       expense,
                                                                 ),
-                                                      ),
-                                                    ).then(
-                                                      (_) => _refreshExpenses(),
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(6),
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          Colors.blue.shade50,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            8,
                                                           ),
-                                                    ),
-                                                    child: Icon(
-                                                      Icons.edit_rounded,
-                                                      color:
-                                                          Colors.blue.shade600,
-                                                      size: 18,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 6),
-                                                InkWell(
-                                                  onTap:
-                                                      () => _confirmDelete(
-                                                        expense.id,
-                                                        expense.title,
+                                                        ).then(
+                                                          (_) =>
+                                                              _refreshExpenses(),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              6,
+                                                            ),
+                                                        decoration: BoxDecoration(
+                                                          color:
+                                                              Colors
+                                                                  .blue
+                                                                  .shade50,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                        ),
+                                                        child: Icon(
+                                                          Icons.edit_rounded,
+                                                          color:
+                                                              Colors
+                                                                  .blue
+                                                                  .shade600,
+                                                          size: 18,
+                                                        ),
                                                       ),
-                                                  child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(6),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.red.shade50,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            8,
+                                                    ),
+                                                    const SizedBox(width: 6),
+                                                    InkWell(
+                                                      onTap:
+                                                          () => _confirmDelete(
+                                                            expense.id,
+                                                            expense.title,
                                                           ),
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              6,
+                                                            ),
+                                                        decoration: BoxDecoration(
+                                                          color:
+                                                              Colors
+                                                                  .red
+                                                                  .shade50,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                        ),
+                                                        child: Icon(
+                                                          Icons.delete_rounded,
+                                                          color:
+                                                              Colors
+                                                                  .red
+                                                                  .shade600,
+                                                          size: 18,
+                                                        ),
+                                                      ),
                                                     ),
-                                                    child: Icon(
-                                                      Icons.delete_rounded,
-                                                      color:
-                                                          Colors.red.shade600,
-                                                      size: 18,
-                                                    ),
-                                                  ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
                                           ],
                                         ),
-                                        onTap:
-                                            () => _showExpenseDetails(
-                                              context,
-                                              expense,
-                                            ),
                                       ),
                                     );
                                   },

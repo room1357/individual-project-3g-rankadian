@@ -16,6 +16,8 @@ class ExpenseService {
   static List<Category> get categories => List.from(_categories);
 
   // Inisialisasi dengan data sampel (panggil di main())
+  // data statis kalo mau load data bisa pake yang ini nanti
+  // static Future<void> initialize() async {
   static void initialize() {
     if (_expenses.isEmpty) {
       // Data sampel (update category menjadi categoryId)
