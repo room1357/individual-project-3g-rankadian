@@ -1,6 +1,7 @@
-# pemrograman mobile evan diantha fafian
+# Pemrograman Mobile Evan Diantha Fafian
 
 Tugas Pemrograman Mobile
+
 
 Nama : Evan Diantha Fafian
 
