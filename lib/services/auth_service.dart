@@ -16,11 +16,11 @@ class AppUser {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
-        'name': name,
-        'password': password,
-      };
+    'id': id,
+    'email': email,
+    'name': name,
+    'password': password,
+  };
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
     return AppUser(
@@ -75,7 +75,10 @@ class AuthService {
     _currentUser = newUser;
 
     // Simpan ke SharedPreferences
-    await prefs.setString('users', jsonEncode(_users.map((e) => e.toJson()).toList()));
+    await prefs.setString(
+      'users',
+      jsonEncode(_users.map((e) => e.toJson()).toList()),
+    );
     await prefs.setString('currentUser', jsonEncode(newUser.toJson()));
     return true;
   }
@@ -102,4 +105,33 @@ class AuthService {
   }
 
   List<AppUser> getAllUsers() => _users;
+
+  Future<void> updateCurrentUser(AppUser updatedUser) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Update user di list
+    final index = _users.indexWhere((u) => u.id == updatedUser.id);
+    if (index != -1) {
+      _users[index] = updatedUser;
+    }
+
+    // Set current user baru
+    _currentUser = updatedUser;
+
+    // Simpan ke SharedPreferences
+    await prefs.setString(
+      'users',
+      jsonEncode(_users.map((e) => e.toJson()).toList()),
+    );
+    await prefs.setString('currentUser', jsonEncode(updatedUser.toJson()));
+  }
+
+  Future<void> updateUserList(List<AppUser> users) async {
+    final prefs = await SharedPreferences.getInstance();
+    _users = users;
+    await prefs.setString(
+      'users',
+      jsonEncode(users.map((e) => e.toJson()).toList()),
+    );
+  }
 }
