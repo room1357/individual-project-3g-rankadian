@@ -18,7 +18,7 @@ class ExpenseService {
   // static Future<void> initialize() async {
   static void initialize() {
     if (_expenses.isEmpty) {
-            _expenses = [
+      _expenses = [
         Expense(
           id: '1',
           title: 'Belanja Bulanan',
@@ -106,4 +106,14 @@ class ExpenseService {
     }
     return csv;
   }
+
+  static Map<String, double> getTotalByCategoryFiltered(List expenses) {
+    final Map<String, double> totals = {};
+    for (var e in expenses) {
+      totals[e.categoryId] = (totals[e.categoryId] ?? 0) + e.amount;
+    }
+    return totals;
+  }
+
+  static List getAllExpenses() => _expenses;
 }
