@@ -1,8 +1,10 @@
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
 
 class ExpenseService {
-  static List<Expense> _expenses = []; // In-memory data
+  static List<Expense> _expenses = [];
   static final List<Category> _categories = [
     Category(id: '1', name: 'Makanan'),
     Category(id: '2', name: 'Transportasi'),
@@ -14,52 +16,38 @@ class ExpenseService {
   static List<Expense> get expenses => List.from(_expenses);
   static List<Category> get categories => List.from(_categories);
 
-  // data statis kalo mau load data bisa pake yang ini nanti
-  // static Future<void> initialize() async {
-  static void initialize() {
-    if (_expenses.isEmpty) {
-      _expenses = [
-        Expense(
-          id: '1',
-          title: 'Belanja Bulanan',
-          amount: 150000,
-          categoryId: '1',
-          date: DateTime(2024, 9, 15),
-          description: 'Belanja kebutuhan',
-        ),
-        Expense(
-          id: '2',
-          title: 'Bensin Motor',
-          amount: 50000,
-          categoryId: '2',
-          date: DateTime(2024, 9, 14),
-          description: 'Isi bensin',
-        ),
-        Expense(
-          id: '3',
-          title: 'Kopi di Cafe',
-          amount: 25000,
-          categoryId: '1',
-          date: DateTime(2024, 9, 14),
-          description: 'Ngopi pagi',
-        ),
-      ];
+  static Future<void> initialize() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedData = prefs.getString('expenses');
+
+    if (storedData != null) {
+      final decoded = jsonDecode(storedData) as List;
+      _expenses = decoded.map((e) => Expense.fromJson(e)).toList();
     }
   }
 
-  static void addExpense(Expense expense) {
-    _expenses.add(expense);
+  static Future<void> _saveExpenses() async {
+    final prefs = await SharedPreferences.getInstance();
+    final encoded = jsonEncode(_expenses.map((e) => e.toJson()).toList());
+    await prefs.setString('expenses', encoded);
   }
 
-  static void updateExpense(String id, Expense updatedExpense) {
+  static Future<void> addExpense(Expense expense) async {
+    _expenses.add(expense);
+    await _saveExpenses();
+  }
+
+  static Future<void> updateExpense(String id, Expense updatedExpense) async {
     final index = _expenses.indexWhere((e) => e.id == id);
     if (index != -1) {
       _expenses[index] = updatedExpense;
+      await _saveExpenses();
     }
   }
 
-  static void deleteExpense(String id) {
+  static Future<void> deleteExpense(String id) async {
     _expenses.removeWhere((e) => e.id == id);
+    await _saveExpenses();
   }
 
   static List<Expense> getExpensesByCategory(String categoryId) {
@@ -79,24 +67,7 @@ class ExpenseService {
     return totals;
   }
 
-  static int getExpenseCount() {
-    return _expenses.length;
-  }
-
-  static void addCategory(Category category) {
-    _categories.add(category);
-  }
-
-  static void updateCategory(String id, Category updatedCategory) {
-    final index = _categories.indexWhere((c) => c.id == id);
-    if (index != -1) {
-      _categories[index] = updatedCategory;
-    }
-  }
-
-  static void deleteCategory(String id) {
-    _categories.removeWhere((c) => c.id == id);
-  }
+  static int getExpenseCount() => _expenses.length;
 
   static String exportToCSV() {
     String csv = 'ID,Judul,Jumlah,Kategori,Tanggal,Deskripsi\n';
@@ -116,4 +87,19 @@ class ExpenseService {
   }
 
   static List getAllExpenses() => _expenses;
+
+  static void addCategory(Category category) {
+    _categories.add(category);
+  }
+
+  static void updateCategory(String id, Category updatedCategory) {
+    final index = _categories.indexWhere((c) => c.id == id);
+    if (index != -1) {
+      _categories[index] = updatedCategory;
+    }
+  }
+
+  static void deleteCategory(String id) {
+    _categories.removeWhere((c) => c.id == id);
+  }
 }

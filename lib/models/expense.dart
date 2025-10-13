@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import '../models/category.dart';
 import '../services/expense_service.dart';
 import '../utils/currency_utils.dart';
 import '../utils/date_utils.dart';
@@ -42,6 +41,9 @@ class Expense {
       'description': description,
     };
   }
+
+  factory Expense.fromJson(Map<String, dynamic> json) => Expense.fromMap(json);
+  Map<String, dynamic> toJson() => toMap();
 
   String get categoryName {
     try {
@@ -90,13 +92,8 @@ class Expense {
     }
   }
 
-  String get formattedAmount {
-    return CurrencyUtils.formatCurrency(amount);
-  }
-
-  String get formattedDate {
-    return MyDateUtils.formatDate(date);
-  }
+  String get formattedAmount => CurrencyUtils.formatCurrency(amount);
+  String get formattedDate => MyDateUtils.formatDate(date);
 
   @override
   String toString() {
