@@ -3,6 +3,7 @@ import 'register_screen.dart';
 import 'home_screen.dart';
 import '../services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/expense_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (success) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('loggedInUser', email);
+      await ExpenseService.initialize();
 
       if (!mounted) return;
 

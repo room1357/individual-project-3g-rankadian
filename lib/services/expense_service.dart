@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import 'auth_service.dart';
 
 class ExpenseService {
   static List<Expense> _expenses = [];
@@ -16,20 +17,36 @@ class ExpenseService {
   static List<Expense> get expenses => List.from(_expenses);
   static List<Category> get categories => List.from(_categories);
 
+  /// Inisialisasi data pengeluaran sesuai user yang login
   static Future<void> initialize() async {
     final prefs = await SharedPreferences.getInstance();
-    final storedData = prefs.getString('expenses');
+    final user = AuthService().currentUser;
+
+    if (user == null) {
+      _expenses = [];
+      return;
+    }
+
+    final key = 'expenses_${user.id}';
+    final storedData = prefs.getString(key);
 
     if (storedData != null) {
       final decoded = jsonDecode(storedData) as List;
       _expenses = decoded.map((e) => Expense.fromJson(e)).toList();
+    } else {
+      _expenses = [];
     }
   }
 
+  /// Simpan data sesuai user
   static Future<void> _saveExpenses() async {
     final prefs = await SharedPreferences.getInstance();
+    final user = AuthService().currentUser;
+    if (user == null) return;
+
+    final key = 'expenses_${user.id}';
     final encoded = jsonEncode(_expenses.map((e) => e.toJson()).toList());
-    await prefs.setString('expenses', encoded);
+    await prefs.setString(key, encoded);
   }
 
   static Future<void> addExpense(Expense expense) async {
@@ -88,6 +105,7 @@ class ExpenseService {
 
   static List getAllExpenses() => _expenses;
 
+  // Kategori
   static void addCategory(Category category) {
     _categories.add(category);
   }
