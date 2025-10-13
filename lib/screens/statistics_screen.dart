@@ -52,7 +52,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             const Text('Per Kategori:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             Expanded(
-              child: totalsByCategory.isEmpty // Tambahkan penanganan jika kosong
+              child: totalsByCategory.isEmpty
                   ? const Center(
                       child: Text(
                         'Belum ada data pengeluaran. Tambahkan expense terlebih dahulu!',
@@ -66,7 +66,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         final amount = totalsByCategory[categoryId]!;
                         final categoryName = ExpenseService.categories.firstWhere(
                           (cat) => cat.id == categoryId,
-                          orElse: () => Category(id: '', name: 'Unknown'), // Sekarang aman karena Category di-import
+                          orElse: () => Category(id: '', name: 'Unknown'),
                         ).name;
 
                         return Card(
@@ -74,7 +74,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             title: Text(categoryName),
                             trailing: Text(
                               CurrencyUtils.formatCurrency(amount),
-                              style: const TextStyle(fontWeight: FontWeight.bold), // Tambah bold untuk konsistensi
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         );
@@ -96,9 +96,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         title: const Text('Export Data ke CSV'),
         content: SizedBox(
           width: double.maxFinite,
-          height: 300, // Batasi tinggi dialog agar tidak terlalu panjang
+          height: 300,
           child: SingleChildScrollView(
-            child: SelectableText( // Buat text bisa di-select/copy
+            child: SelectableText(
               csvContent,
               style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
             ),
@@ -109,7 +109,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             onPressed: () => Navigator.pop(context),
             child: const Text('Tutup'),
           ),
-          // Opsional: Jika ingin tombol copy (butuh import 'package:flutter/services.dart'; di atas)
           // ElevatedButton(
           //   onPressed: () {
           //     Clipboard.setData(ClipboardData(text: csvContent));

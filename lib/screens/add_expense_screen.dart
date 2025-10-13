@@ -124,7 +124,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       children: [
                         const SizedBox(height: 10),
 
-                        // Title Field
+                        // judul
                         _buildLabel('Judul Pengeluaran', Icons.title_rounded),
                         const SizedBox(height: 8),
                         TextField(
@@ -153,7 +153,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Amount Field
+                        // jumlah
                         _buildLabel('Jumlah', Icons.payments_rounded),
                         const SizedBox(height: 8),
                         TextField(
@@ -189,7 +189,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Category Field
+                        // kategori
                         _buildLabel('Kategori', Icons.category_rounded),
                         const SizedBox(height: 8),
                         Container(
@@ -240,7 +240,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Date Field
+                        // tanggal
                         _buildLabel('Tanggal', Icons.calendar_today_rounded),
                         const SizedBox(height: 8),
                         InkWell(
@@ -294,7 +294,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Description Field
+                        // deskripsi
                         _buildLabel('Deskripsi', Icons.description_rounded),
                         const SizedBox(height: 8),
                         TextField(
@@ -324,7 +324,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                         const SizedBox(height: 30),
 
-                        // Save Button
+                        // Save
                         SizedBox(
                           width: double.infinity,
                           height: 56,

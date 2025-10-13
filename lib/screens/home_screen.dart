@@ -279,7 +279,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Custom AppBar
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(

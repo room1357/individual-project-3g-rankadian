@@ -8,11 +8,9 @@ import 'services/auth_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 🔹 Inisialisasi data yang disimpan (expenses & users)
   ExpenseService.initialize();
   await AuthService().init();
 
-  // 🔹 Cek status login terakhir dari SharedPreferences
   final prefs = await SharedPreferences.getInstance();
   final loggedInUser = prefs.getString('loggedInUser');
 
@@ -31,7 +29,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      // 🔹 Jika sudah login → HomeScreen, jika belum → LoginScreen
       home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
     );
   }

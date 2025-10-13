@@ -19,7 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
 
   void _login() async {
-    // 🔹 Jalankan validasi terlebih dahulu
     if (!_formKey.currentState!.validate()) return;
 
     final email = _emailController.text.trim();
@@ -32,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (success) {
-      // 🔹 Simpan status login ke SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('loggedInUser', email);
 
@@ -87,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
               child: Form(
-                key: _formKey, // 🔹 Bungkus seluruh form dengan Form
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -221,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 24),
 
-                          // Tombol Login
+                          // Login
                           SizedBox(
                             width: double.infinity,
                             height: 56,
@@ -261,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 30),
 
-                    // Link ke Register
+                    // Register
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

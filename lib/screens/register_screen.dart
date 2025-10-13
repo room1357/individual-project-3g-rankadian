@@ -22,7 +22,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscureConfirm = true;
 
   void _register() async {
-    // 🔹 Jalankan validasi form terlebih dahulu
     if (!_formKey.currentState!.validate()) return;
 
     final name = _nameController.text.trim();
@@ -85,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
-              child: Form( // 🔹 Tambahkan Form di sini
+              child: Form(
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -136,7 +135,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 35),
 
-                    // 🔹 Card Form
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -298,7 +296,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 30),
 
-                    // 🔹 Link ke Login
+                    // Login
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -353,7 +351,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // 🔹 Helper untuk styling input agar kode tetap rapi
   InputDecoration _inputDecoration({
     required String label,
     required IconData icon,

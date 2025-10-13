@@ -195,7 +195,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         const SizedBox(height: 40),
 
-                        // Name Field
+                        // Name
                         _buildLabel(
                           'Nama Lengkap',
                           Icons.person_outline_rounded,
@@ -231,7 +231,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Email Field
+                        // Email
                         _buildLabel('Alamat Email', Icons.email_outlined),
                         const SizedBox(height: 8),
                         TextField(
@@ -265,7 +265,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         const SizedBox(height: 40),
 
-                        // Info Card
+                        // Info
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -302,7 +302,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         const SizedBox(height: 30),
 
-                        // Save Button
+                        // Save
                         SizedBox(
                           width: double.infinity,
                           height: 56,

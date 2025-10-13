@@ -2,7 +2,6 @@ import '../models/expense.dart';
 import 'package:collection/collection.dart';
 
 class ExpenseManager {
-  // Data sample yang akan digunakan untuk pengujian fungsi-fungsi
   static List<Expense> expenses = [
     Expense(
       id: '1',
@@ -70,7 +69,6 @@ class ExpenseManager {
     ),
   ];
 
-  // 1. Mendapatkan total pengeluaran per kategori
   static Map<String, double> getTotalByCategory(List<Expense> expenses) {
     Map<String, double> result = {};
     for (var expense in expenses) {
@@ -80,13 +78,11 @@ class ExpenseManager {
     return result;
   }
 
-  // 2. Mendapatkan pengeluaran tertinggi
   static Expense? getHighestExpense(List<Expense> expenses) {
     if (expenses.isEmpty) return null;
     return expenses.reduce((a, b) => a.amount > b.amount ? a : b);
   }
 
-  // 3. Mendapatkan pengeluaran bulan tertentu
   static List<Expense> getExpensesByMonth(List<Expense> expenses, int month, int year) {
     return expenses
         .where((expense) =>
@@ -94,7 +90,6 @@ class ExpenseManager {
         .toList();
   }
 
-  // 4. Mencari pengeluaran berdasarkan kata kunci
   static List<Expense> searchExpenses(List<Expense> expenses, String keyword) {
     String lowerKeyword = keyword.toLowerCase();
     return expenses.where((expense) =>
@@ -103,7 +98,6 @@ class ExpenseManager {
         expense.categoryName.toLowerCase().contains(lowerKeyword)).toList();
   }
 
-  // 5. Mendapatkan rata-rata pengeluaran harian
   static double getAverageDaily(List<Expense> expenses) {
     if (expenses.isEmpty) return 0;
     double total = expenses.fold(0, (sum, expense) => sum + expense.amount);
@@ -114,7 +108,6 @@ class ExpenseManager {
     return total / uniqueDays.length;
   }
 
-  // Filtering
   static List<Expense> getFoodExpenses(List<Expense> expenses) {
     return expenses
         .where((expense) => expense.categoryName.toLowerCase() == 'makanan')
@@ -125,7 +118,6 @@ class ExpenseManager {
     return expenses.where((expense) => expense.amount > threshold).toList();
   }
 
-  // Transformasi
   static List<String> getExpenseTitles(List<Expense> expenses) {
     return expenses.map((expense) => expense.title).toList();
   }
@@ -136,12 +128,10 @@ class ExpenseManager {
         .toList();
   }
 
-  // Grouping dengan groupBy
   static Map<String, List<Expense>> groupByCategory(List<Expense> expenses) {
     return groupBy(expenses, (expense) => expense.categoryName);
   }
 
-  // Sorting
   static List<Expense> sortByAmountDescending(List<Expense> expenses) {
     List<Expense> sortedList = [...expenses];
     sortedList.sort((a, b) => b.amount.compareTo(a.amount));

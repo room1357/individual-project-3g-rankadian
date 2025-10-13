@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context,
       MaterialPageRoute(builder: (_) => const EditProfileScreen()),
     );
-    setState(() {}); // Refresh profil setelah kembali
+    setState(() {});
   }
 
   @override
@@ -78,7 +78,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Custom AppBar
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(

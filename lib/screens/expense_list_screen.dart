@@ -6,7 +6,6 @@ class ExpenseListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Data sample menggunakan List<Expense>
     final List<Expense> expenses = [
       Expense(
         id: '1',
@@ -86,7 +85,6 @@ class ExpenseListScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // Custom AppBar
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
@@ -364,7 +362,6 @@ class ExpenseListScreen extends StatelessWidget {
     return 'Rp ${total.toStringAsFixed(0)}';
   }
 
-  // Method untuk mendapatkan warna berdasarkan kategori
   Color _getCategoryColor(String category) {
     switch (category.toLowerCase()) {
       case 'makanan':
@@ -382,7 +379,6 @@ class ExpenseListScreen extends StatelessWidget {
     }
   }
 
-  // Method untuk mendapatkan icon berdasarkan kategori
   IconData _getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
       case 'makanan':
@@ -400,7 +396,6 @@ class ExpenseListScreen extends StatelessWidget {
     }
   }
 
-  // Method untuk menampilkan detail pengeluaran dalam dialog
   void _showExpenseDetails(BuildContext context, Expense expense) {
     showDialog(
       context: context,

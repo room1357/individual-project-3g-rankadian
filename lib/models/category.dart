@@ -7,7 +7,6 @@ class Category {
     required this.name,
   });
 
-  // Method untuk Map (untuk export jika perlu)
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -15,7 +14,6 @@ class Category {
     };
   }
 
-  // Factory dari Map
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
       id: map['id'],
@@ -24,5 +22,5 @@ class Category {
   }
 
   @override
-  String toString() => name; // Untuk tampilan sederhana
+  String toString() => name;
 }

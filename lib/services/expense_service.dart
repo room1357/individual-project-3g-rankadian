@@ -11,17 +11,14 @@ class ExpenseService {
     Category(id: '5', name: 'Pendidikan'),
   ];
 
-  // Getter (return copy untuk safety)
   static List<Expense> get expenses => List.from(_expenses);
   static List<Category> get categories => List.from(_categories);
 
-  // Inisialisasi dengan data sampel (panggil di main())
   // data statis kalo mau load data bisa pake yang ini nanti
   // static Future<void> initialize() async {
   static void initialize() {
     if (_expenses.isEmpty) {
-      // Data sampel (update category menjadi categoryId)
-      _expenses = [
+            _expenses = [
         Expense(
           id: '1',
           title: 'Belanja Bulanan',
@@ -46,12 +43,10 @@ class ExpenseService {
           date: DateTime(2024, 9, 14),
           description: 'Ngopi pagi',
         ),
-        // Tambah lebih banyak jika perlu
       ];
     }
   }
 
-  // CRUD Expense
   static void addExpense(Expense expense) {
     _expenses.add(expense);
   }
@@ -67,12 +62,10 @@ class ExpenseService {
     _expenses.removeWhere((e) => e.id == id);
   }
 
-  // Filter sederhana
   static List<Expense> getExpensesByCategory(String categoryId) {
     return _expenses.where((e) => e.categoryId == categoryId).toList();
   }
 
-  // Statistik sederhana (menggunakan fold dan where)
   static double getTotalAmount() {
     return _expenses.fold(0, (sum, e) => sum + e.amount);
   }
@@ -90,7 +83,6 @@ class ExpenseService {
     return _expenses.length;
   }
 
-  // CRUD Category (simple)
   static void addCategory(Category category) {
     _categories.add(category);
   }
@@ -104,11 +96,8 @@ class ExpenseService {
 
   static void deleteCategory(String id) {
     _categories.removeWhere((c) => c.id == id);
-    // Opsional: Hapus expenses dengan category ini
-    // _expenses.removeWhere((e) => e.categoryId == id);
   }
 
-  // Export CSV sederhana (return string)
   static String exportToCSV() {
     String csv = 'ID,Judul,Jumlah,Kategori,Tanggal,Deskripsi\n';
     for (var expense in _expenses) {

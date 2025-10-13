@@ -297,7 +297,7 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Category Filter
+                      // filter
                       SizedBox(
                         height: 45,
                         child: ListView(
@@ -340,7 +340,7 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Statistics Summary
+                      // Statistics
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
@@ -376,7 +376,7 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Expense List
+                      // list
                       Expanded(
                         child:
                             filteredExpenses.isEmpty
@@ -485,8 +485,6 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                                             ),
 
                                             const SizedBox(width: 12),
-
-                                            // Trailing (nominal + tombol edit & hapus)
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,

@@ -43,7 +43,6 @@ class AuthService {
 
   AppUser? get currentUser => _currentUser;
 
-  // Inisialisasi saat app dijalankan
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     final usersString = prefs.getString('users');
@@ -61,7 +60,6 @@ class AuthService {
   Future<bool> register(String email, String name, String password) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Cek jika email sudah terdaftar
     if (_users.any((u) => u.email == email)) return false;
 
     final newUser = AppUser(
@@ -74,7 +72,6 @@ class AuthService {
     _users.add(newUser);
     _currentUser = newUser;
 
-    // Simpan ke SharedPreferences
     await prefs.setString(
       'users',
       jsonEncode(_users.map((e) => e.toJson()).toList()),
@@ -109,16 +106,13 @@ class AuthService {
   Future<void> updateCurrentUser(AppUser updatedUser) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Update user di list
     final index = _users.indexWhere((u) => u.id == updatedUser.id);
     if (index != -1) {
       _users[index] = updatedUser;
     }
 
-    // Set current user baru
     _currentUser = updatedUser;
 
-    // Simpan ke SharedPreferences
     await prefs.setString(
       'users',
       jsonEncode(_users.map((e) => e.toJson()).toList()),

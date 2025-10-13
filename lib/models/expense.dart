@@ -43,7 +43,6 @@ class Expense {
     };
   }
 
-  /// Nama kategori berdasarkan categoryId (sudah ada)
   String get categoryName {
     try {
       final category = ExpenseService.categories.firstWhere(
@@ -55,9 +54,6 @@ class Expense {
     }
   }
 
-  /// BACKWARDS COMPATIBILITY:
-  /// Banyak kode lama mungkin memakai `expense.category`.
-  /// Tambahkan alias ini supaya pemanggilan lama tetap jalan.
   String get category => categoryName;
 
   Color get categoryColor {
