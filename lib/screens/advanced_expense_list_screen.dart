@@ -4,6 +4,7 @@ import '../services/expense_service.dart';
 import '../utils/currency_utils.dart';
 import 'add_expense_screen.dart';
 import 'edit_expense_screen.dart';
+import 'home_screen.dart';
 
 class AdvancedExpenseListScreen extends StatefulWidget {
   const AdvancedExpenseListScreen({super.key});
@@ -239,11 +240,20 @@ class _AdvancedExpenseListScreenState extends State<AdvancedExpenseListScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: IconButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const HomeScreen(),
+                            ),
+                            (route) => false,
+                          );
+                        },
                         icon: const Icon(Icons.arrow_back_rounded),
                         color: Colors.white,
                       ),
                     ),
+
                     const SizedBox(width: 16),
                     const Text(
                       'Daftar Pengeluaran',
