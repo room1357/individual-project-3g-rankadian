@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
-// import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import '../models/category.dart';
 import '../services/expense_service.dart';
@@ -18,134 +17,553 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   String _selectedRange = 'bulanan';
   DateTimeRange? _customRange;
 
+  Color _getCategoryColor(String categoryName) {
+    switch (categoryName.toLowerCase()) {
+      case 'makanan':
+        return const Color(0xFFff6b6b);
+      case 'transportasi':
+        return const Color(0xFF4ecdc4);
+      case 'utilitas':
+        return const Color(0xFF95e1d3);
+      case 'hiburan':
+        return const Color(0xFFf38181);
+      case 'pendidikan':
+        return const Color(0xFF667eea);
+      default:
+        return const Color(0xFF667eea);
+    }
+  }
+
+  IconData _getCategoryIcon(String categoryName) {
+    switch (categoryName.toLowerCase()) {
+      case 'makanan':
+        return Icons.restaurant_rounded;
+      case 'transportasi':
+        return Icons.directions_car_rounded;
+      case 'utilitas':
+        return Icons.home_rounded;
+      case 'hiburan':
+        return Icons.movie_rounded;
+      case 'pendidikan':
+        return Icons.school_rounded;
+      default:
+        return Icons.category_rounded;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final filteredExpenses = _getFilteredExpenses;
-    final totalAmount = filteredExpenses.fold<double>(0, (sum, e) => sum + e.amount);
-    final totalsByCategory = ExpenseService.getTotalByCategoryFiltered(filteredExpenses);
+    final totalAmount = filteredExpenses.fold<double>(
+      0,
+      (sum, e) => sum + e.amount,
+    );
+    final totalsByCategory = ExpenseService.getTotalByCategoryFiltered(
+      filteredExpenses,
+    );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Statistik Pengeluaran'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.picture_as_pdf),
-            onPressed: () => _generatePdfReport(filteredExpenses),
-            tooltip: 'Export ke PDF',
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF667eea), Color(0xFF764ba2)],
           ),
-          IconButton(
-            icon: const Icon(Icons.download),
-            onPressed: _showExportDialog,
-            tooltip: 'Export ke CSV',
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 🔹 Filter Rentang Waktu
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButton<String>(
-                    value: _selectedRange,
-                    items: const [
-                      DropdownMenuItem(value: 'harian', child: Text('Harian')),
-                      DropdownMenuItem(value: 'mingguan', child: Text('Mingguan')),
-                      DropdownMenuItem(value: 'bulanan', child: Text('Bulanan')),
-                      DropdownMenuItem(value: 'custom', child: Text('Custom Range')),
-                    ],
-                    onChanged: (value) async {
-                      if (value == 'custom') {
-                        final picked = await showDateRangePicker(
-                          context: context,
-                          firstDate: DateTime(2023),
-                          lastDate: DateTime.now(),
-                        );
-                        if (picked != null) {
-                          setState(() => _customRange = picked);
-                        }
-                      }
-                      setState(() => _selectedRange = value!);
-                    },
-                  ),
-                ),
-                if (_selectedRange == 'custom' && _customRange != null)
-                  Text(
-                    "${DateFormat('dd MMM').format(_customRange!.start)} - ${DateFormat('dd MMM yyyy').format(_customRange!.end)}",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // 🔹 Total Ringkasan
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
                   children: [
-                    const Text('Total Pengeluaran',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text(
-                      CurrencyUtils.formatCurrency(totalAmount),
-                      style: const TextStyle(
-                          fontSize: 24, color: Colors.green, fontWeight: FontWeight.bold),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.arrow_back_rounded),
+                        color: Colors.white,
+                      ),
                     ),
-                    Text('Jumlah Item: ${filteredExpenses.length}',
-                        style: const TextStyle(fontSize: 16)),
+                    const SizedBox(width: 16),
+                    const Expanded(
+                      child: Text(
+                        'Statistik Pengeluaran',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        onPressed: () => _generatePdfReport(filteredExpenses),
+                        icon: const Icon(Icons.picture_as_pdf_rounded),
+                        color: Colors.white,
+                        tooltip: 'Export PDF',
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        onPressed: _showExportDialog,
+                        icon: const Icon(Icons.download_rounded),
+                        color: Colors.white,
+                        tooltip: 'Export CSV',
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
 
-            const Text('Per Kategori:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 24),
 
-            // 🔹 Daftar Per Kategori
-            Expanded(
-              child: totalsByCategory.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'Tidak ada data untuk rentang waktu ini.',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: totalsByCategory.length,
-                      itemBuilder: (context, index) {
-                        final categoryId = totalsByCategory.keys.elementAt(index);
-                        final amount = totalsByCategory[categoryId]!;
-                        final categoryName = ExpenseService.categories
-                            .firstWhere(
-                              (cat) => cat.id == categoryId,
-                              orElse: () => Category(id: '', name: 'Unknown'),
-                            )
-                            .name;
-
-                        return Card(
-                          child: ListTile(
-                            title: Text(categoryName),
-                            trailing: Text(
-                              CurrencyUtils.formatCurrency(amount),
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                              color: const Color(
+                                0xFF667eea,
+                              ).withValues(alpha: 0.3),
                             ),
                           ),
-                        );
-                      },
-                    ),
-            ),
-          ],
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.filter_list_rounded,
+                                color: Color(0xFF667eea),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: _selectedRange,
+                                    isExpanded: true,
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down_rounded,
+                                      color: Color(0xFF667eea),
+                                    ),
+                                    items: const [
+                                      DropdownMenuItem(
+                                        value: 'harian',
+                                        child: Text('Harian'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'mingguan',
+                                        child: Text('Mingguan'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'bulanan',
+                                        child: Text('Bulanan'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'custom',
+                                        child: Text('Custom Range'),
+                                      ),
+                                    ],
+                                    onChanged: (value) async {
+                                      if (value == 'custom') {
+                                        final picked =
+                                            await showDateRangePicker(
+                                              context: context,
+                                              firstDate: DateTime(2023),
+                                              lastDate: DateTime.now(),
+                                              builder: (context, child) {
+                                                return Theme(
+                                                  data: Theme.of(
+                                                    context,
+                                                  ).copyWith(
+                                                    colorScheme:
+                                                        const ColorScheme.light(
+                                                          primary: Color(
+                                                            0xFF667eea,
+                                                          ),
+                                                        ),
+                                                  ),
+                                                  child: child!,
+                                                );
+                                              },
+                                            );
+                                        if (picked != null) {
+                                          setState(() => _customRange = picked);
+                                        }
+                                      }
+                                      setState(() => _selectedRange = value!);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      if (_selectedRange == 'custom' && _customRange != null)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFF667eea,
+                              ).withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.calendar_today_rounded,
+                                  color: Color(0xFF667eea),
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "${DateFormat('dd MMM').format(_customRange!.start)} - ${DateFormat('dd MMM yyyy').format(_customRange!.end)}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF667eea),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                      const SizedBox(height: 24),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(
+                                  0xFF667eea,
+                                ).withValues(alpha: 0.3),
+                                blurRadius: 15,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Total Pengeluaran',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white.withValues(
+                                            alpha: 0.9,
+                                          ),
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        CurrencyUtils.formatCurrency(
+                                          totalAmount,
+                                        ),
+                                        style: const TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.account_balance_wallet_rounded,
+                                      color: Colors.white,
+                                      size: 32,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.receipt_long_rounded,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Jumlah Item: ${filteredExpenses.length}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF667eea),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Per Kategori',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      Expanded(
+                        child:
+                            totalsByCategory.isEmpty
+                                ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.bar_chart_rounded,
+                                        size: 80,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        'Tidak ada data',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'untuk rentang waktu ini',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey.shade500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                : ListView.builder(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  itemCount: totalsByCategory.length,
+                                  itemBuilder: (context, index) {
+                                    final categoryId = totalsByCategory.keys
+                                        .elementAt(index);
+                                    final amount =
+                                        totalsByCategory[categoryId]!;
+                                    final categoryName =
+                                        ExpenseService.categories
+                                            .firstWhere(
+                                              (cat) => cat.id == categoryId,
+                                              orElse:
+                                                  () => Category(
+                                                    id: '',
+                                                    name: 'Unknown',
+                                                  ),
+                                            )
+                                            .name;
+                                    final color = _getCategoryColor(
+                                      categoryName,
+                                    );
+                                    final icon = _getCategoryIcon(categoryName);
+                                    final percentage = (amount /
+                                            totalAmount *
+                                            100)
+                                        .toStringAsFixed(1);
+
+                                    return Container(
+                                      margin: const EdgeInsets.only(bottom: 12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.shade200,
+                                            blurRadius: 10,
+                                            offset: const Offset(0, 5),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  padding: const EdgeInsets.all(
+                                                    12,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: color.withValues(
+                                                      alpha: 0.2,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                  ),
+                                                  child: Icon(
+                                                    icon,
+                                                    color: color,
+                                                    size: 24,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 16),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        categoryName,
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      Text(
+                                                        '$percentage% dari total',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors
+                                                                  .grey
+                                                                  .shade600,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text(
+                                                  CurrencyUtils.formatCurrency(
+                                                    amount,
+                                                  ),
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: color,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: LinearProgressIndicator(
+                                                value: amount / totalAmount,
+                                                minHeight: 8,
+                                                backgroundColor: color
+                                                    .withValues(alpha: 0.2),
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(color),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // 🔹 Filter berdasarkan pilihan rentang waktu
   List get _getFilteredExpenses {
     final all = ExpenseService.getAllExpenses();
     final now = DateTime.now();
@@ -175,71 +593,108 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         start = DateTime(now.year, now.month, 1);
     }
 
-    return all.where((e) => e.date.isAfter(start) && e.date.isBefore(end)).toList();
+    return all
+        .where((e) => e.date.isAfter(start) && e.date.isBefore(end))
+        .toList();
   }
 
-  // 🔹 Export CSV (fitur lama kamu tetap dipakai)
   void _showExportDialog() {
     final csvContent = ExpenseService.exportToCSV();
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Export Data ke CSV'),
-        content: SizedBox(
-          width: double.maxFinite,
-          height: 300,
-          child: SingleChildScrollView(
-            child: SelectableText(
-              csvContent,
-              style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
+            title: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF4facfe).withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.table_chart_rounded,
+                    color: Color(0xFF4facfe),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Text('Export ke CSV'),
+              ],
+            ),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 300,
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: SingleChildScrollView(
+                  child: SelectableText(
+                    csvContent,
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Tutup'),
+              ),
+            ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Tutup'),
-          ),
-        ],
-      ),
     );
   }
 
-  // 🔹 Export PDF
   Future<void> _generatePdfReport(List expenses) async {
     final pdf = pw.Document();
 
     pdf.addPage(
       pw.MultiPage(
-        build: (context) => [
-          pw.Center(
-            child: pw.Text('Laporan Pengeluaran ($_selectedRange)',
-                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-          ),
-          pw.SizedBox(height: 20),
-          pw.TableHelper.fromTextArray(
-            headers: ['Tanggal', 'Judul', 'Kategori', 'Jumlah'],
-            data: expenses.map((e) {
-              return [
-                DateFormat('dd/MM/yyyy').format(e.date),
-                e.title,
-                e.categoryName,
-                CurrencyUtils.formatCurrency(e.amount),
-              ];
-            }).toList(),
-            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-            cellStyle: const pw.TextStyle(fontSize: 10),
-            cellAlignment: pw.Alignment.centerLeft,
-          ),
-          pw.Divider(),
-          pw.Align(
-            alignment: pw.Alignment.centerRight,
-            child: pw.Text(
-              'Total: ${CurrencyUtils.formatCurrency(expenses.fold(0, (sum, e) => sum + e.amount))}',
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-            ),
-          ),
-        ],
+        build:
+            (context) => [
+              pw.Center(
+                child: pw.Text(
+                  'Laporan Pengeluaran ($_selectedRange)',
+                  style: pw.TextStyle(
+                    fontSize: 18,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+              pw.SizedBox(height: 20),
+              pw.TableHelper.fromTextArray(
+                headers: ['Tanggal', 'Judul', 'Kategori', 'Jumlah'],
+                data:
+                    expenses.map((e) {
+                      return [
+                        DateFormat('dd/MM/yyyy').format(e.date),
+                        e.title,
+                        e.categoryName,
+                        CurrencyUtils.formatCurrency(e.amount),
+                      ];
+                    }).toList(),
+                headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                cellStyle: const pw.TextStyle(fontSize: 10),
+                cellAlignment: pw.Alignment.centerLeft,
+              ),
+              pw.Divider(),
+              pw.Align(
+                alignment: pw.Alignment.centerRight,
+                child: pw.Text(
+                  'Total: ${CurrencyUtils.formatCurrency(expenses.fold(0, (sum, e) => sum + e.amount))}',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                ),
+              ),
+            ],
       ),
     );
 
