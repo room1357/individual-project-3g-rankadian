@@ -12,7 +12,7 @@ void main() async {
   await ExpenseService.initialize();
 
   final prefs = await SharedPreferences.getInstance();
-  final loggedInUser = prefs.getString('loggedInUser');
+  final loggedInUser = prefs.getString('currentUser');
 
   runApp(MyApp(isLoggedIn: loggedInUser != null));
 }
