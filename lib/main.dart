@@ -8,8 +8,8 @@ import 'services/auth_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await ExpenseService.initialize();
   await AuthService().init();
+  await ExpenseService.initialize();
 
   final prefs = await SharedPreferences.getInstance();
   final loggedInUser = prefs.getString('loggedInUser');

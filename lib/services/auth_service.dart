@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import 'expense_service.dart';
+
 class AppUser {
   final String id;
   final String email;
@@ -92,6 +94,7 @@ class AuthService {
 
     _currentUser = user;
     await prefs.setString('currentUser', jsonEncode(user.toJson()));
+    await ExpenseService.initialize();
     return true;
   }
 
@@ -99,6 +102,7 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     _currentUser = null;
     await prefs.remove('currentUser');
+    await ExpenseService.initialize();
   }
 
   List<AppUser> getAllUsers() => _users;
