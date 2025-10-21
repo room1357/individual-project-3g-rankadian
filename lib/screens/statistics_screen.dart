@@ -54,13 +54,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     final filteredExpenses = _getFilteredExpenses;
-    final totalAmount = filteredExpenses.fold<double>(
-      0,
-      (sum, e) => sum + e.amount,
-    );
-    final totalsByCategory = ExpenseService.getTotalByCategoryFiltered(
-      filteredExpenses,
-    );
+    final totalAmount = filteredExpenses.fold<double>(0, (sum, e) => sum + e.amount);
+    final totalsByCategory = ExpenseService.getTotalByCategoryFiltered(filteredExpenses);
 
     return Scaffold(
       body: Container(
@@ -74,6 +69,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         child: SafeArea(
           child: Column(
             children: [
+              // 🔹 Header
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
@@ -100,35 +96,37 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: IconButton(
-                        onPressed: () => _generatePdfReport(filteredExpenses),
-                        icon: const Icon(Icons.picture_as_pdf_rounded),
-                        color: Colors.white,
-                        tooltip: 'Export PDF',
-                      ),
+                    // 🔸 Export PDF
+                    _buildHeaderIcon(
+                      icon: Icons.picture_as_pdf_rounded,
+                      tooltip: 'Export PDF',
+                      onPressed: () => _generatePdfReport(filteredExpenses),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: IconButton(
-                        onPressed: _showExportDialog,
-                        icon: const Icon(Icons.download_rounded),
-                        color: Colors.white,
-                        tooltip: 'Export CSV',
-                      ),
+                    // 🔸 Export CSV
+                    _buildHeaderIcon(
+                      icon: Icons.download_rounded,
+                      tooltip: 'Export CSV',
+                      onPressed: _showExportDialog,
+                    ),
+                    const SizedBox(width: 8),
+                    // 🔸 Share CSV
+                    _buildHeaderIcon(
+                      icon: Icons.share_rounded,
+                      tooltip: 'Bagikan CSV',
+                      onPressed: () async {
+                        await ExpenseService.shareCSV();
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('File CSV siap dibagikan!')),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
 
+              // 🔹 Body utama
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -142,6 +140,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     children: [
                       const SizedBox(height: 24),
 
+                      // 🔸 Dropdown filter waktu
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Container(
@@ -149,72 +148,40 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           decoration: BoxDecoration(
                             color: Colors.grey.shade50,
                             borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color: const Color(
-                                0xFF667eea,
-                              ).withValues(alpha: 0.3),
-                            ),
+                            border: Border.all(color: const Color(0xFF667eea).withValues(alpha: 0.3)),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.filter_list_rounded,
-                                color: Color(0xFF667eea),
-                              ),
+                              const Icon(Icons.filter_list_rounded, color: Color(0xFF667eea)),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: _selectedRange,
                                     isExpanded: true,
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down_rounded,
-                                      color: Color(0xFF667eea),
-                                    ),
+                                    icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF667eea)),
                                     items: const [
-                                      DropdownMenuItem(
-                                        value: 'harian',
-                                        child: Text('Harian'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'mingguan',
-                                        child: Text('Mingguan'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'bulanan',
-                                        child: Text('Bulanan'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'custom',
-                                        child: Text('Custom Range'),
-                                      ),
+                                      DropdownMenuItem(value: 'harian', child: Text('Harian')),
+                                      DropdownMenuItem(value: 'mingguan', child: Text('Mingguan')),
+                                      DropdownMenuItem(value: 'bulanan', child: Text('Bulanan')),
+                                      DropdownMenuItem(value: 'custom', child: Text('Custom Range')),
                                     ],
                                     onChanged: (value) async {
                                       if (value == 'custom') {
-                                        final picked =
-                                            await showDateRangePicker(
-                                              context: context,
-                                              firstDate: DateTime(2023),
-                                              lastDate: DateTime.now(),
-                                              builder: (context, child) {
-                                                return Theme(
-                                                  data: Theme.of(
-                                                    context,
-                                                  ).copyWith(
-                                                    colorScheme:
-                                                        const ColorScheme.light(
-                                                          primary: Color(
-                                                            0xFF667eea,
-                                                          ),
-                                                        ),
-                                                  ),
-                                                  child: child!,
-                                                );
-                                              },
+                                        final picked = await showDateRangePicker(
+                                          context: context,
+                                          firstDate: DateTime(2023),
+                                          lastDate: DateTime.now(),
+                                          builder: (context, child) {
+                                            return Theme(
+                                              data: Theme.of(context).copyWith(
+                                                colorScheme: const ColorScheme.light(primary: Color(0xFF667eea)),
+                                              ),
+                                              child: child!,
                                             );
-                                        if (picked != null) {
-                                          setState(() => _customRange = picked);
-                                        }
+                                          },
+                                        );
+                                        if (picked != null) setState(() => _customRange = picked);
                                       }
                                       setState(() => _selectedRange = value!);
                                     },
@@ -232,19 +199,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xFF667eea,
-                              ).withValues(alpha: 0.1),
+                              color: const Color(0xFF667eea).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
-                                  Icons.calendar_today_rounded,
-                                  color: Color(0xFF667eea),
-                                  size: 16,
-                                ),
+                                const Icon(Icons.calendar_today_rounded, color: Color(0xFF667eea), size: 16),
                                 const SizedBox(width: 8),
                                 Text(
                                   "${DateFormat('dd MMM').format(_customRange!.start)} - ${DateFormat('dd MMM yyyy').format(_customRange!.end)}",
@@ -260,299 +221,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
                       const SizedBox(height: 24),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(
-                                  0xFF667eea,
-                                ).withValues(alpha: 0.3),
-                                blurRadius: 15,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Total Pengeluaran',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white.withValues(
-                                            alpha: 0.9,
-                                          ),
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        CurrencyUtils.formatCurrency(
-                                          totalAmount,
-                                        ),
-                                        style: const TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.2,
-                                      ),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.account_balance_wallet_rounded,
-                                      color: Colors.white,
-                                      size: 32,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.receipt_long_rounded,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'Jumlah Item: ${filteredExpenses.length}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // 🔸 Total Pengeluaran
+                      _buildTotalCard(totalAmount, filteredExpenses),
+
                       const SizedBox(height: 24),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 4,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF667eea),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              'Per Kategori',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade800,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      Expanded(
-                        child:
-                            totalsByCategory.isEmpty
-                                ? Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.bar_chart_rounded,
-                                        size: 80,
-                                        color: Colors.grey.shade300,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Text(
-                                        'Tidak ada data',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey.shade600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'untuk rentang waktu ini',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey.shade500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                : ListView.builder(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
-                                  itemCount: totalsByCategory.length,
-                                  itemBuilder: (context, index) {
-                                    final categoryId = totalsByCategory.keys
-                                        .elementAt(index);
-                                    final amount =
-                                        totalsByCategory[categoryId]!;
-                                    final categoryName =
-                                        ExpenseService.categories
-                                            .firstWhere(
-                                              (cat) => cat.id == categoryId,
-                                              orElse:
-                                                  () => Category(
-                                                    id: '',
-                                                    name: 'Unknown',
-                                                  ),
-                                            )
-                                            .name;
-                                    final color = _getCategoryColor(
-                                      categoryName,
-                                    );
-                                    final icon = _getCategoryIcon(categoryName);
-                                    final percentage = (amount /
-                                            totalAmount *
-                                            100)
-                                        .toStringAsFixed(1);
-
-                                    return Container(
-                                      margin: const EdgeInsets.only(bottom: 12),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(15),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.shade200,
-                                            blurRadius: 10,
-                                            offset: const Offset(0, 5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  padding: const EdgeInsets.all(
-                                                    12,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: color.withValues(
-                                                      alpha: 0.2,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          12,
-                                                        ),
-                                                  ),
-                                                  child: Icon(
-                                                    icon,
-                                                    color: color,
-                                                    size: 24,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 16),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        categoryName,
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(height: 4),
-                                                      Text(
-                                                        '$percentage% dari total',
-                                                        style: TextStyle(
-                                                          color:
-                                                              Colors
-                                                                  .grey
-                                                                  .shade600,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Text(
-                                                  CurrencyUtils.formatCurrency(
-                                                    amount,
-                                                  ),
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                    color: color,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 12),
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: LinearProgressIndicator(
-                                                value: amount / totalAmount,
-                                                minHeight: 8,
-                                                backgroundColor: color
-                                                    .withValues(alpha: 0.2),
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                      Color
-                                                    >(color),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                      ),
+                      // 🔸 Per Kategori
+                      _buildCategoryList(totalsByCategory, totalAmount),
                     ],
                   ),
                 ),
@@ -564,10 +239,29 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     );
   }
 
+  // 🔹 Widget tambahan: Header Icon Button
+  Widget _buildHeaderIcon({
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(icon),
+        color: Colors.white,
+        tooltip: tooltip,
+      ),
+    );
+  }
+
   List get _getFilteredExpenses {
     final all = ExpenseService.getAllExpenses();
     final now = DateTime.now();
-
     DateTime start;
     DateTime end = now;
 
@@ -593,111 +287,193 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         start = DateTime(now.year, now.month, 1);
     }
 
-    return all
-        .where((e) => e.date.isAfter(start) && e.date.isBefore(end))
-        .toList();
+    return all.where((e) => e.date.isAfter(start) && e.date.isBefore(end)).toList();
   }
 
+  // 🔹 Export Dialog (CSV)
   void _showExportDialog() {
     final csvContent = ExpenseService.exportToCSV();
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF4facfe).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.table_chart_rounded,
-                    color: Color(0xFF4facfe),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                const Text('Export ke CSV'),
-              ],
-            ),
-            content: SizedBox(
-              width: double.maxFinite,
-              height: 300,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: SingleChildScrollView(
-                  child: SelectableText(
-                    csvContent,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Tutup'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Export ke CSV'),
+        content: SizedBox(
+          width: double.maxFinite,
+          height: 300,
+          child: SingleChildScrollView(
+            child: SelectableText(csvContent, style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
           ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Tutup')),
+        ],
+      ),
     );
   }
 
+  // 🔹 Generate PDF
   Future<void> _generatePdfReport(List expenses) async {
     final pdf = pw.Document();
-
     pdf.addPage(
       pw.MultiPage(
-        build:
-            (context) => [
-              pw.Center(
-                child: pw.Text(
-                  'Laporan Pengeluaran ($_selectedRange)',
-                  style: pw.TextStyle(
-                    fontSize: 18,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-              ),
-              pw.SizedBox(height: 20),
-              pw.TableHelper.fromTextArray(
-                headers: ['Tanggal', 'Judul', 'Kategori', 'Jumlah'],
-                data:
-                    expenses.map((e) {
-                      return [
-                        DateFormat('dd/MM/yyyy').format(e.date),
-                        e.title,
-                        e.categoryName,
-                        CurrencyUtils.formatCurrency(e.amount),
-                      ];
-                    }).toList(),
-                headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                cellStyle: const pw.TextStyle(fontSize: 10),
-                cellAlignment: pw.Alignment.centerLeft,
-              ),
-              pw.Divider(),
-              pw.Align(
-                alignment: pw.Alignment.centerRight,
-                child: pw.Text(
-                  'Total: ${CurrencyUtils.formatCurrency(expenses.fold(0, (sum, e) => sum + e.amount))}',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                ),
-              ),
-            ],
+        build: (context) => [
+          pw.Center(
+            child: pw.Text('Laporan Pengeluaran ($_selectedRange)',
+                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+          ),
+          pw.SizedBox(height: 20),
+          pw.TableHelper.fromTextArray(
+            headers: ['Tanggal', 'Judul', 'Kategori', 'Jumlah'],
+            data: expenses
+                .map((e) => [
+                      DateFormat('dd/MM/yyyy').format(e.date),
+                      e.title,
+                      e.categoryName,
+                      CurrencyUtils.formatCurrency(e.amount),
+                    ])
+                .toList(),
+          ),
+          pw.Divider(),
+          pw.Align(
+            alignment: pw.Alignment.centerRight,
+            child: pw.Text(
+              'Total: ${CurrencyUtils.formatCurrency(expenses.fold(0, (sum, e) => sum + e.amount))}',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          ),
+        ],
       ),
     );
-
     await Printing.layoutPdf(onLayout: (format) => pdf.save());
+  }
+
+  // 🔹 Total Card
+  Widget _buildTotalCard(double totalAmount, List filteredExpenses) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Color(0xFF667eea), Color(0xFF764ba2)]),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const Text('Total Pengeluaran',
+                      style: TextStyle(fontSize: 14, color: Colors.white70, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 8),
+                  Text(CurrencyUtils.formatCurrency(totalAmount),
+                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                ]),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(color: Colors.white24, shape: BoxShape.circle),
+                  child: const Icon(Icons.account_balance_wallet_rounded, color: Colors.white, size: 32),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(12)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.receipt_long_rounded, color: Colors.white, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Jumlah Item: ${filteredExpenses.length}',
+                    style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 🔹 Kategori List
+  Widget _buildCategoryList(Map<String, double> totalsByCategory, double totalAmount) {
+    if (totalsByCategory.isEmpty) {
+      return Expanded(
+        child: Center(
+          child: Text('Tidak ada data untuk rentang waktu ini', style: TextStyle(color: Colors.grey.shade600)),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: totalsByCategory.length,
+        itemBuilder: (context, index) {
+          final categoryId = totalsByCategory.keys.elementAt(index);
+          final amount = totalsByCategory[categoryId]!;
+          final categoryName = ExpenseService.categories
+              .firstWhere((cat) => cat.id == categoryId, orElse: () => Category(id: '', name: 'Unknown'))
+              .name;
+          final color = _getCategoryColor(categoryName);
+          final icon = _getCategoryIcon(categoryName);
+          final percentage = (amount / totalAmount * 100).toStringAsFixed(1);
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 10, offset: const Offset(0, 5))],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration:
+                            BoxDecoration(color: color.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
+                        child: Icon(icon, color: color, size: 24),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(categoryName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            const SizedBox(height: 4),
+                            Text('$percentage% dari total',
+                                style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+                          ],
+                        ),
+                      ),
+                      Text(CurrencyUtils.formatCurrency(amount),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color)),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: LinearProgressIndicator(
+                      value: amount / totalAmount,
+                      minHeight: 8,
+                      backgroundColor: color.withValues(alpha: 0.2),
+                      valueColor: AlwaysStoppedAnimation<Color>(color),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

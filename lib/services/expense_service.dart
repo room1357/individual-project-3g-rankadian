@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
 import 'auth_service.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+
 
 class ExpenseService {
   static List<Expense> _expenses = [];
@@ -92,8 +97,31 @@ class ExpenseService {
       csv +=
           '${expense.id},"${expense.title}",${expense.amount},${expense.categoryName},"${expense.formattedDate}","${expense.description}"\n';
     }
+    
     return csv;
   }
+
+    static Future<void> shareCSV() async {
+    try {
+      final csvData = exportToCSV();
+
+      // Simpan file CSV ke direktori sementara
+      final directory = await getTemporaryDirectory();
+      final path = '${directory.path}/pengeluaran.csv';
+      final file = File(path);
+      await file.writeAsString(csvData);
+
+      // Share file-nya
+      await Share.shareXFiles(
+        [XFile(path)],
+        text: 'Berikut data pengeluaran saya 💸',
+      );
+    } catch (e) {
+      debugPrint('Gagal membagikan CSV: $e');
+      rethrow;
+    }
+  }
+
 
   static Map<String, double> getTotalByCategoryFiltered(List expenses) {
     final Map<String, double> totals = {};
