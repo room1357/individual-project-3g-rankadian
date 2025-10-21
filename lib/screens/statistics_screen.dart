@@ -212,8 +212,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                                 );
                                               },
                                             );
-                                        if (picked != null)
+                                        if (picked != null) {
                                           setState(() => _customRange = picked);
+                                        }
                                       }
                                       setState(() => _selectedRange = value!);
                                     },
