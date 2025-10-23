@@ -5,6 +5,7 @@ import 'profile_screen.dart';
 import 'settings_screen.dart';
 import 'category_screen.dart';
 import 'statistics_screen.dart';
+import 'posts_screen.dart';
 import '../services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,30 +31,27 @@ class _HomeScreenState extends State<HomeScreen> {
   void _logout() async {
     final confirm = await showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: const Text('Konfirmasi Logout'),
-            content: const Text('Apakah Anda yakin ingin keluar?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Batal'),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF667eea),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text('Logout'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Konfirmasi Logout'),
+        content: const Text('Apakah Anda yakin ingin keluar?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
           ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF667eea),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
     );
 
     if (confirm == true) {
@@ -82,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Header
+              // ===== HEADER =====
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
@@ -130,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              // Main Content
+              // ===== MAIN CONTENT =====
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -171,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 30),
 
-                      // Menu Section
+                      // ===== MENU CEPAT =====
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
@@ -198,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Menu Grid - Compact
+                      // ===== GRID MENU =====
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -216,9 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder:
-                                          (context) =>
-                                              const AdvancedExpenseListScreen(),
+                                      builder: (context) =>
+                                          const AdvancedExpenseListScreen(),
                                     ),
                                   );
                                 },
@@ -231,8 +228,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder:
-                                          (context) => const StatisticsScreen(),
+                                      builder: (context) =>
+                                          const StatisticsScreen(),
                                     ),
                                   );
                                 },
@@ -245,8 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder:
-                                          (context) => const CategoryScreen(),
+                                      builder: (context) =>
+                                          const CategoryScreen(),
                                     ),
                                   );
                                 },
@@ -259,8 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder:
-                                          (context) => const ProfileScreen(),
+                                      builder: (context) =>
+                                          const ProfileScreen(),
                                     ),
                                   );
                                 },
@@ -273,17 +270,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder:
-                                          (context) => const SettingsScreen(),
+                                      builder: (context) =>
+                                          const SettingsScreen(),
                                     ),
                                   );
                                 },
                               ),
+
+                              // ✅ CARD BARU UNTUK POSTS API
                               _buildMinimalCard(
-                                'Pesan',
-                                Icons.chat_bubble_rounded,
-                                const Color(0xFFfa709a),
-                                null,
+                                'Posts (API)',
+                                Icons.cloud_rounded,
+                                const Color(0xFF43cea2),
+                                () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const PostsScreen(),
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -299,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      // Bottom Navigation Bar
+      // ===== BOTTOM NAVIGATION =====
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -318,11 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildNavItem(Icons.home_rounded, 'Home', 0),
-                _buildNavItem(
-                  Icons.account_balance_wallet_rounded,
-                  'Expense',
-                  1,
-                ),
+                _buildNavItem(Icons.account_balance_wallet_rounded, 'Expense', 1),
                 _buildNavItem(Icons.bar_chart_rounded, 'Stats', 2),
                 _buildNavItem(Icons.person_rounded, 'Profile', 3),
               ],
@@ -333,12 +336,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildQuickStatCard(
-    String title,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
+  // ===================== WIDGET UTIL =====================
+
+  Widget _buildQuickStatCard(String title, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -390,8 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
     VoidCallback? onTap,
   ) {
     return GestureDetector(
-      onTap:
-          onTap ??
+      onTap: onTap ??
           () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -451,24 +450,12 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () {
         setState(() => _selectedIndex = index);
 
-        // Navigation logic
         if (index == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AdvancedExpenseListScreen(),
-            ),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const AdvancedExpenseListScreen()));
         } else if (index == 2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const StatisticsScreen()),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const StatisticsScreen()));
         } else if (index == 3) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ProfileScreen()),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen()));
         }
       },
       child: Column(
@@ -477,10 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color:
-                  isSelected
-                      ? color.withValues(alpha: 0.1)
-                      : Colors.transparent,
+              color: isSelected ? color.withValues(alpha: 0.1) : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 24),
