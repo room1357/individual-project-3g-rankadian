@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ===================== WIDGET UTIL =====================
+  // Widgets Builders
 
   Widget _buildQuickStatCard(
     String title,
