@@ -264,3 +264,14 @@ Bisa difilter berdasarkan harian, mingguan, bulanan, atau kategori.
   ![Statistics Screen](assets/evidence_expense_tracker/statistics_screen.png)
 
 ---
+
+## 🧑‍💻 Pengembang
+
+| **Atribut**                     | **Keterangan**                                                                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 👤 **Nama**                     | **Rankadian Evan Diantha**                                                                                                                                          |
+| 💼 **Project**                  | _Individual Project — Expense Tracker Manager_                                                                                                                      |
+| 📘 **Mata Kuliah**              | **Pemrograman Mobile (Flutter)**                                                                                                                                    |
+| 🧭 **Deskripsi Singkat**        | Aplikasi untuk mencatat, mengelola, dan menganalisis pengeluaran pengguna berdasarkan kategori dan rentang waktu tertentu (harian, mingguan, bulanan, atau custom). |
+| 🧠 **Teknologi yang Digunakan** | Flutter, Dart, HTTP Client, REST API (JSONPlaceholder), dan stateful widgets dengan UI modern berbasis gradient.                                                    |
+| 📅 **Tahun Pengerjaan**         | **2025**                                                                                                                                                            |
