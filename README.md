@@ -128,6 +128,8 @@ lib
 
 ---
 
+## 🖼️ Screenshot & Deskripsi Setiap Halaman
+
 ---
 
 ### 🧠 About Screen  
@@ -177,14 +179,6 @@ Formulir untuk memperbarui profil pengguna seperti nama, email, dan foto profil.
 - 🔘 **Simpan:** Menyimpan perubahan profil.  
 - 🔘 **Batal:** Membatalkan perubahan.  
 ![Edit Profile Screen](screenshots/expense_tracker/edit_profile_screen.png)
-
----
-
-### 💵 Expense List Screen  
-Menampilkan daftar sederhana pengeluaran pengguna tanpa fitur lanjutan.  
-- ➕ **Tambah:** Menambah pengeluaran baru.  
-- 🗑️ **Hapus:** Menghapus pengeluaran dari daftar.  
-![Expense List Screen](screenshots/expense_tracker/expense_list_screen.png)
 
 ---
 
