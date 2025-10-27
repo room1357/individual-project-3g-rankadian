@@ -1,4 +1,5 @@
 # 💰 Expense Tracker Manager
+
 [![Flutter](https://img.shields.io/badge/Flutter-3.22-blue?logo=flutter)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/Build-Passing-brightgreen)](#)
@@ -10,15 +11,15 @@ Aplikasi ini juga memiliki fitur integrasi dengan **REST API (Posts API)** sebag
 
 ## 🚀 Fitur Utama
 
-| Fitur | Deskripsi |
-|-------|------------|
-| 🧾 **Manajemen Pengeluaran** | Tambah, ubah, hapus, dan lihat daftar transaksi pengeluaran pengguna. |
-| 📊 **Statistik Pengeluaran** | Menampilkan grafik pengeluaran per kategori dan periode waktu. |
-| 🏷️ **Manajemen Kategori** | Kelola kategori pengeluaran agar data lebih terstruktur. |
-| 👤 **Profil Pengguna** | Menampilkan data pengguna yang sedang login. |
-| ⚙️ **Pengaturan Aplikasi** | Mengatur preferensi aplikasi seperti bahasa dan notifikasi. |
-| ☁️ **Posts (API)** | Fitur tambahan untuk latihan REST API (GET, POST, DELETE) dengan JSONPlaceholder. |
-| 🔐 **Autentikasi Login** | Sistem login/logout sederhana menggunakan `SharedPreferences`. |
+| Fitur                        | Deskripsi                                                                         |
+| ---------------------------- | --------------------------------------------------------------------------------- |
+| 🧾 **Manajemen Pengeluaran** | Tambah, ubah, hapus, dan lihat daftar transaksi pengeluaran pengguna.             |
+| 📊 **Statistik Pengeluaran** | Menampilkan grafik pengeluaran per kategori dan periode waktu.                    |
+| 🏷️ **Manajemen Kategori**    | Kelola kategori pengeluaran agar data lebih terstruktur.                          |
+| 👤 **Profil Pengguna**       | Menampilkan data pengguna yang sedang login.                                      |
+| ⚙️ **Pengaturan Aplikasi**   | Mengatur preferensi aplikasi seperti bahasa dan notifikasi.                       |
+| ☁️ **Posts (API)**           | Fitur tambahan untuk latihan REST API (GET, POST, DELETE) dengan JSONPlaceholder. |
+| 🔐 **Autentikasi Login**     | Sistem login/logout sederhana menggunakan `SharedPreferences`.                    |
 
 ---
 
@@ -27,25 +28,30 @@ Aplikasi ini juga memiliki fitur integrasi dengan **REST API (Posts API)** sebag
 - **Flutter 3.35.4**
 - **Dart 3.9.2**
 - **DevTools 2.48.0**
-- **HTTP package** — komunikasi REST API  
-- **Shared Preferences** — penyimpanan lokal sesi pengguna  
-- **Material Design 3** — komponen UI  
-- **JSONPlaceholder API** — API dummy untuk testing CRUD  
+- **HTTP package** — komunikasi REST API
+- **Shared Preferences** — penyimpanan lokal sesi pengguna
+- **Material Design 3** — komponen UI
+- **JSONPlaceholder API** — API dummy untuk testing CRUD
 
 ---
 
 ## ⚙️ Cara Menjalankan Aplikasi
 
 1️⃣ **Clone Repository**
+
 ```bash
 git https://github.com/room1357/individual-project-3g-rankadian.git
 cd individual-project-3g-rankadian
 ```
+
 2️⃣ **Install Dependencies**
+
 ```bash
 flutter pub get
 ```
+
 3️⃣ **Jalankan di Emulator atau Device**
+
 ```bash
 flutter run
 ```
@@ -53,6 +59,7 @@ flutter run
 ---
 
 ## 📂 Struktur Folder Utama
+
 ```plaintext
 lib
 │   main.dart                       # Entry point utama aplikasi
@@ -102,19 +109,19 @@ lib
 
 ## 🧠 Penjelasan Setiap Halaman
 
-| File                                      | Deskripsi Singkat                                                                                                                  |
-|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| **home_screen.dart**                      | Tampilan utama aplikasi. Menampilkan sapaan pengguna, ringkasan cepat, dan menu navigasi ke fitur lain.                            |
-| **login_screen.dart**                     | Halaman untuk login pengguna dengan validasi input.                                                                                |
-| **register_screen.dart**                  | Form pendaftaran pengguna baru.                                                                                                   |
-| **advanced_expense_list_screen.dart**     | Daftar pengeluaran lengkap dengan opsi tambah, edit, dan hapus.                                                                   |
-| **add_expense_screen.dart**               | Form untuk menambahkan pengeluaran baru.                                                                                           |
-| **edit_expense_screen.dart**              | Form untuk memperbarui pengeluaran yang sudah ada.                                                                                 |
-| **statistics_screen.dart**                | Menampilkan grafik dan ringkasan statistik pengeluaran bulanan.                                                                    |
-| **category_screen.dart**                  | Mengelola daftar kategori pengeluaran.                                                                                             |
-| **profile_screen.dart**                   | Menampilkan profil pengguna dan tombol edit profil.                                                                                |
-| **edit_profile_screen.dart**              | Form untuk mengubah nama/email pengguna.                                                                                           |
-| **settings_screen.dart**                  | Pengaturan aplikasi seperti notifikasi, bahasa, versi, dan tautan ke halaman *About*.                                              |
-| **about_screen.dart**                     | Informasi singkat tentang aplikasi dan pengembang.                                                                                 |
-| **posts_screen.dart**                     | Menampilkan daftar posting dari API eksternal (*JSONPlaceholder*). Dapat menambah, menghapus, dan memuat ulang postingan.          |
-| **expense_list_screen.dart**              | Tampilan daftar pengeluaran sederhana, versi dasar dari *Advanced Expense List*.                                                   |
+| File                                  | Deskripsi Singkat                                                                                                         |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **home_screen.dart**                  | Tampilan utama aplikasi. Menampilkan sapaan pengguna, ringkasan cepat, dan menu navigasi ke fitur lain.                   |
+| **login_screen.dart**                 | Halaman untuk login pengguna dengan validasi input.                                                                       |
+| **register_screen.dart**              | Form pendaftaran pengguna baru.                                                                                           |
+| **advanced_expense_list_screen.dart** | Daftar pengeluaran lengkap dengan opsi tambah, edit, dan hapus.                                                           |
+| **add_expense_screen.dart**           | Form untuk menambahkan pengeluaran baru.                                                                                  |
+| **edit_expense_screen.dart**          | Form untuk memperbarui pengeluaran yang sudah ada.                                                                        |
+| **statistics_screen.dart**            | Menampilkan grafik dan ringkasan statistik pengeluaran bulanan.                                                           |
+| **category_screen.dart**              | Mengelola daftar kategori pengeluaran.                                                                                    |
+| **profile_screen.dart**               | Menampilkan profil pengguna dan tombol edit profil.                                                                       |
+| **edit_profile_screen.dart**          | Form untuk mengubah nama/email pengguna.                                                                                  |
+| **settings_screen.dart**              | Pengaturan aplikasi seperti notifikasi, bahasa, versi, dan tautan ke halaman _About_.                                     |
+| **about_screen.dart**                 | Informasi singkat tentang aplikasi dan pengembang.                                                                        |
+| **posts_screen.dart**                 | Menampilkan daftar posting dari API eksternal (_JSONPlaceholder_). Dapat menambah, menghapus, dan memuat ulang postingan. |
+| **expense_list_screen.dart**          | Tampilan daftar pengeluaran sederhana, versi dasar dari _Advanced Expense List_.                                          |
