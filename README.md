@@ -125,3 +125,123 @@ lib
 | **about_screen.dart**                 | Informasi singkat tentang aplikasi dan pengembang.                                                                        |
 | **posts_screen.dart**                 | Menampilkan daftar posting dari API eksternal (_JSONPlaceholder_). Dapat menambah, menghapus, dan memuat ulang postingan. |
 | **expense_list_screen.dart**          | Tampilan daftar pengeluaran sederhana, versi dasar dari _Advanced Expense List_.                                          |
+
+---
+
+---
+
+### 🧠 About Screen  
+Menampilkan informasi tentang aplikasi, tujuan pembuatannya, serta identitas pengembang.  
+Biasanya berisi versi aplikasi dan deskripsi singkat proyek.  
+![About Screen](screenshots/expense_tracker/about_screen.png)
+
+---
+
+### 🧾 Add Expense Screen  
+Formulir untuk menambahkan data pengeluaran baru.  
+Pengguna dapat mengisi kategori, nominal, tanggal, dan deskripsi pengeluaran.  
+- 🔘 **Simpan:** Menyimpan data pengeluaran ke dalam sistem.  
+- 🔘 **Batal:** Kembali tanpa menyimpan data.  
+![Add Expense Screen](screenshots/expense_tracker/add_expense_screen.png)
+
+---
+
+### 💼 Advanced Expense List Screen  
+Menampilkan daftar pengeluaran lengkap dengan fitur **cari, tambah, edit, dan hapus**.  
+- ➕ **Tambah:** Membuka form tambah pengeluaran.  
+- ✏️ **Edit:** Mengubah detail pengeluaran tertentu.  
+- 🗑️ **Hapus:** Menghapus pengeluaran dari daftar.  
+- 🔁 **Refresh:** Memuat ulang daftar pengeluaran.  
+![Advanced Expense List Screen](screenshots/expense_tracker/advanced_expense_list_screen.png)
+
+---
+
+### 🗂️ Category Screen  
+Mengelola kategori pengeluaran yang dapat digunakan saat input data.  
+- ➕ **Tambah Kategori:** Menambahkan kategori baru.  
+- 🗑️ **Hapus Kategori:** Menghapus kategori yang tidak digunakan.  
+![Category Screen](screenshots/expense_tracker/category_screen.png)
+
+---
+
+### ✏️ Edit Expense Screen  
+Formulir untuk memperbarui data pengeluaran yang sudah tersimpan.  
+- 🔘 **Simpan:** Menyimpan perubahan pada pengeluaran.  
+- 🔘 **Batal:** Membatalkan perubahan.  
+![Edit Expense Screen](screenshots/expense_tracker/edit_expense_screen.png)
+
+---
+
+### 👤 Edit Profile Screen  
+Formulir untuk memperbarui profil pengguna seperti nama, email, dan foto profil.  
+- 🔘 **Simpan:** Menyimpan perubahan profil.  
+- 🔘 **Batal:** Membatalkan perubahan.  
+![Edit Profile Screen](screenshots/expense_tracker/edit_profile_screen.png)
+
+---
+
+### 💵 Expense List Screen  
+Menampilkan daftar sederhana pengeluaran pengguna tanpa fitur lanjutan.  
+- ➕ **Tambah:** Menambah pengeluaran baru.  
+- 🗑️ **Hapus:** Menghapus pengeluaran dari daftar.  
+![Expense List Screen](screenshots/expense_tracker/expense_list_screen.png)
+
+---
+
+### 🏠 Home Screen  
+Halaman utama setelah login. Menampilkan sapaan pengguna, total pengeluaran, dan menu cepat ke fitur lain.  
+- 🏷️ **Menu Grid:** Navigasi cepat ke Statistik, Kategori, Profil, Pengaturan, dan Posts.  
+- 🔘 **Logout:** Keluar dari aplikasi.  
+![Home Screen](screenshots/expense_tracker/home_screen.png)
+
+---
+
+### 🔐 Login Screen  
+Halaman untuk masuk ke aplikasi menggunakan email dan password.  
+- 🔘 **Login:** Memverifikasi dan masuk ke aplikasi.  
+- 🔘 **Daftar:** Arahkan ke halaman Register.  
+![Login Screen](screenshots/expense_tracker/login_screen.png)
+
+---
+
+### ☁️ Posts Screen  
+Menampilkan daftar postingan dari API eksternal (`jsonplaceholder.typicode.com`).  
+- ➕ **Tambah:** Membuat posting baru ke API.  
+- 🗑️ **Hapus:** Menghapus posting yang dipilih.  
+- 🔁 **Refresh:** Memuat ulang daftar posting.  
+![Posts Screen](screenshots/expense_tracker/posts_screen.png)
+
+---
+
+### 👥 Profile Screen  
+Menampilkan profil pengguna yang sedang login.  
+- ✏️ **Edit Profil:** Membuka form edit profil.  
+- 🔘 **Logout:** Keluar dari akun.  
+![Profile Screen](screenshots/expense_tracker/profile_screen.png)
+
+---
+
+### 📝 Register Screen  
+Form pendaftaran untuk pengguna baru.  
+- 🔘 **Daftar:** Membuat akun baru.  
+- 🔘 **Login:** Kembali ke halaman login.  
+![Register Screen](screenshots/expense_tracker/register_screen.png)
+
+---
+
+### ⚙️ Settings Screen  
+Halaman pengaturan aplikasi seperti tema, bahasa, notifikasi, dan informasi versi.  
+- 🔘 **Tentang Aplikasi:** Menuju halaman *About*.  
+- 🔘 **Notifikasi:** Mengaktifkan atau menonaktifkan notifikasi.  
+![Settings Screen](screenshots/expense_tracker/settings_screen.png)
+
+---
+
+### 📊 Statistics Screen  
+Menampilkan grafik dan ringkasan statistik pengeluaran pengguna.  
+Bisa difilter berdasarkan harian, mingguan, bulanan, atau kategori.  
+- 🔘 **Filter:** Menyaring data berdasarkan waktu atau kategori.  
+- 🔁 **Refresh:** Memperbarui data statistik.  
+![Statistics Screen](screenshots/expense_tracker/statistics_screen.png)
+
+---
