@@ -50,46 +50,49 @@ flutter pub get
 flutter run
 ```
 
+---
+
 ## 📂 Struktur Folder Utama
+```plaintext
 lib
-│ main.dart # Entry point utama aplikasi
-│ rest_client.dart # Client HTTP dasar (tidak digunakan langsung)
+│   main.dart                       # Entry point utama aplikasi
+│   rest_client.dart                # Client HTTP dasar (tidak digunakan langsung)
 │
 ├───client
-│ rest_client.dart # Implementasi REST client untuk konsumsi API JSONPlaceholder
+│       rest_client.dart            # Implementasi REST client untuk konsumsi API JSONPlaceholder
 │
 ├───models
-│ category.dart # Model data kategori pengeluaran
-│ expense.dart # Model data pengeluaran
-│ post.dart # Model data postingan (API)
-│ user.dart # Model data pengguna
+│       category.dart               # Model data kategori pengeluaran
+│       expense.dart                # Model data pengeluaran
+│       post.dart                   # Model data postingan (API)
+│       user.dart                   # Model data pengguna
 │
 ├───screens
-│ about_screen.dart # Halaman tentang aplikasi
-│ add_expense_screen.dart # Form tambah pengeluaran baru
-│ advanced_expense_list_screen.dart # Daftar pengeluaran lengkap (fitur utama)
-│ category_screen.dart # Manajemen kategori pengeluaran
-│ edit_expense_screen.dart # Form edit pengeluaran
-│ edit_profile_screen.dart # Form edit profil pengguna
-│ expense_list_screen.dart # Tampilan daftar pengeluaran sederhana
-│ home_screen.dart # Halaman utama (menu cepat & ringkasan)
-│ login_screen.dart # Halaman login pengguna
-│ posts_screen.dart # Halaman demonstrasi API eksternal (CRUD Post)
-│ profile_screen.dart # Halaman profil pengguna
-│ register_screen.dart # Halaman pendaftaran pengguna
-│ settings_screen.dart # Halaman pengaturan aplikasi
-│ statistics_screen.dart # Halaman statistik & grafik pengeluaran
+│       about_screen.dart               # Halaman tentang aplikasi
+│       add_expense_screen.dart         # Form tambah pengeluaran baru
+│       advanced_expense_list_screen.dart  # Daftar pengeluaran lengkap (fitur utama)
+│       category_screen.dart            # Manajemen kategori pengeluaran
+│       edit_expense_screen.dart        # Form edit pengeluaran
+│       edit_profile_screen.dart        # Form edit profil pengguna
+│       expense_list_screen.dart        # Tampilan daftar pengeluaran sederhana
+│       home_screen.dart                # Halaman utama (menu cepat & ringkasan)
+│       login_screen.dart               # Halaman login pengguna
+│       posts_screen.dart               # Halaman demonstrasi API eksternal (CRUD Post)
+│       profile_screen.dart             # Halaman profil pengguna
+│       register_screen.dart            # Halaman pendaftaran pengguna
+│       settings_screen.dart            # Halaman pengaturan aplikasi
+│       statistics_screen.dart          # Halaman statistik & grafik pengeluaran
 │
 ├───services
-│ auth_service.dart # Layanan autentikasi (login/logout)
-│ expense_manager.dart # Logika tambahan untuk pengelolaan pengeluaran
-│ expense_service.dart # CRUD data pengeluaran (local + shared preferences)
-│ looping_examples.dart # Contoh fungsi looping (latihan/eksperimen)
-│ post_service.dart # CRUD data posts via REST API
+│       auth_service.dart               # Layanan autentikasi (login/logout)
+│       expense_manager.dart            # Logika tambahan untuk pengelolaan pengeluaran
+│       expense_service.dart            # CRUD data pengeluaran (local + shared preferences)
+│       looping_examples.dart           # Contoh fungsi looping (latihan/eksperimen)
+│       post_service.dart               # CRUD data posts via REST API
 │
 ├───utils
-│ currency_utils.dart # Utilitas format mata uang (Rp)
-│ date_utils.dart # Utilitas format dan manipulasi tanggal
+│       currency_utils.dart             # Utilitas format mata uang (Rp)
+│       date_utils.dart                 # Utilitas format dan manipulasi tanggal
 │
 └───widgets
-expense_card.dart # Widget tampilan kartu pengeluaran
+        expense_card.dart               # Widget tampilan kartu pengeluaran
