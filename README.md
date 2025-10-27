@@ -96,3 +96,25 @@ lib
 │
 └───widgets
         expense_card.dart               # Widget tampilan kartu pengeluaran
+```
+
+---
+
+## 🧠 Penjelasan Setiap Halaman
+
+| File                                      | Deskripsi Singkat                                                                                                                  |
+|-------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| **home_screen.dart**                      | Tampilan utama aplikasi. Menampilkan sapaan pengguna, ringkasan cepat, dan menu navigasi ke fitur lain.                            |
+| **login_screen.dart**                     | Halaman untuk login pengguna dengan validasi input.                                                                                |
+| **register_screen.dart**                  | Form pendaftaran pengguna baru.                                                                                                   |
+| **advanced_expense_list_screen.dart**     | Daftar pengeluaran lengkap dengan opsi tambah, edit, dan hapus.                                                                   |
+| **add_expense_screen.dart**               | Form untuk menambahkan pengeluaran baru.                                                                                           |
+| **edit_expense_screen.dart**              | Form untuk memperbarui pengeluaran yang sudah ada.                                                                                 |
+| **statistics_screen.dart**                | Menampilkan grafik dan ringkasan statistik pengeluaran bulanan.                                                                    |
+| **category_screen.dart**                  | Mengelola daftar kategori pengeluaran.                                                                                             |
+| **profile_screen.dart**                   | Menampilkan profil pengguna dan tombol edit profil.                                                                                |
+| **edit_profile_screen.dart**              | Form untuk mengubah nama/email pengguna.                                                                                           |
+| **settings_screen.dart**                  | Pengaturan aplikasi seperti notifikasi, bahasa, versi, dan tautan ke halaman *About*.                                              |
+| **about_screen.dart**                     | Informasi singkat tentang aplikasi dan pengembang.                                                                                 |
+| **posts_screen.dart**                     | Menampilkan daftar posting dari API eksternal (*JSONPlaceholder*). Dapat menambah, menghapus, dan memuat ulang postingan.          |
+| **expense_list_screen.dart**              | Tampilan daftar pengeluaran sederhana, versi dasar dari *Advanced Expense List*.                                                   |
