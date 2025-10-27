@@ -269,7 +269,7 @@ Bisa difilter berdasarkan harian, mingguan, bulanan, atau kategori.
 
 | **Atribut**                     | **Keterangan**                                                                                                                                                      |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 👤 **Nama**                     | **Rankadian Evan Diantha**                                                                                                                                          |
+| 👤 **Nama**                     | ** Evan Diantha Fafian**                                                                                                                                          |
 | 💼 **Project**                  | _Individual Project — Expense Tracker Manager_                                                                                                                      |
 | 📘 **Mata Kuliah**              | **Pemrograman Mobile (Flutter)**                                                                                                                                    |
 | 🧭 **Deskripsi Singkat**        | Aplikasi untuk mencatat, mengelola, dan menganalisis pengeluaran pengguna berdasarkan kategori dan rentang waktu tertentu (harian, mingguan, bulanan, atau custom). |
